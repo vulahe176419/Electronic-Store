@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity"
+    android:gravity="center"
+    android:orientation="vertical"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:textSize="34sp" />
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_margin="10dp"
+        android:hint="email"
+        android:gravity="center"
+
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edemailLg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/custtomedit"
+            android:paddingLeft="10dp"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_margin="10dp"
+        android:hint="password"
+        android:gravity="center"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edpasswordLg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/custtomedit"
+            android:paddingLeft="10dp"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+    <TextView
+        android:id="@+id/txtForgerPass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#4E4E4E"
+        android:text="Forget Password"
+        android:padding="10dp"
+        android:gravity="end"
+        android:textStyle="italic"
+        />
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:layout_margin="10dp"
+        android:background="@drawable/custtombutton"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Don't have account?" />
+
+        <TextView
+            android:id="@+id/txtSignup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="   Sign up"
+            android:textColor="#876400"
+            android:textStyle="italic" />
+    </LinearLayout>
+
+
+</LinearLayout>
