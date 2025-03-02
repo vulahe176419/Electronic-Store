@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "959282313266",
+    "firebase_url": "https://electronic-store-151fb-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "electronic-store-151fb",
+    "storage_bucket": "electronic-store-151fb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959282313266:android:213c5fee7bfab492eaa42b",
+        "android_client_info": {
+          "package_name": "com.example.electronicstore"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtE1N2cyw2clOgaCwvubGSyAH9Ss9pr9c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
