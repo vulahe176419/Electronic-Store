@@ -1,103 +1,79 @@
 package com.example.electronicstore;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.util.Patterns;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.AuthResult;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
-    private TextInputEditText edmail, edpassword;
-    private Button btnLogin;
-    private TextView txtSignup, txtForgerPass;
-    private FirebaseAuth mAuth;
+
+    private EditText emailEditText, passwordEditText;
+    private Button loginButton;
+    private TextView signupText, forgotPassText;
+    private FirebaseAuth auth;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        edmail = findViewById(R.id.edemailLg);
-        edpassword = findViewById(R.id.edpasswordLg);
-        btnLogin = findViewById(R.id.btnLogin);
-        txtSignup = findViewById(R.id.txtSignup);
-        txtForgerPass = findViewById(R.id.txtForgerPass);
-        mAuth = FirebaseAuth.getInstance();
+        emailEditText = findViewById(R.id.in_email);
+        passwordEditText = findViewById(R.id.in_password);
+        loginButton = findViewById(R.id.btn_login);
+        signupText = findViewById(R.id.btn_signup);
+        forgotPassText = findViewById(R.id.btn_forgotpass);
 
-        // Prefill fields if data is passed (optional, kept for flexibility)
-        Intent intent = getIntent();
-        if (intent != null && intent.getExtras() != null) {
-            Bundle ex = intent.getExtras();
-            edmail.setText(ex.getString("email"));
-            edpassword.setText(ex.getString("password"));
-        }
+        auth = FirebaseAuth.getInstance();
+        progressDialog = new ProgressDialog(this);
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String email = edmail.getText().toString().trim();
-                String password = edpassword.getText().toString().trim();
+        loginButton.setOnClickListener(v -> loginUser());
 
-                if (email.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "All fields are required!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (!isValidEmail(email)) {
-                    Toast.makeText(LoginActivity.this, "Invalid email address!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    Log.d(TAG, "signInWithEmail:success");
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    Toast.makeText(LoginActivity.this, "Login success!", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                                    startActivity(intent);
-                                    finish(); // Remove LoginActivity from back stack
-                                } else {
-                                    Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                    Toast.makeText(LoginActivity.this, "Invalid email or password!", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-            }
+        signupText.setOnClickListener(v -> {
+            startActivity(new Intent(LoginActivity.this, SignupActivity.class));
         });
 
-        txtSignup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent in = new Intent(LoginActivity.this, SignupActivity.class);
-                startActivity(in);
-            }
-        });
-
-        txtForgerPass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO: Implement forgot password functionality
-                Toast.makeText(LoginActivity.this, "Forgot Password not implemented yet.", Toast.LENGTH_SHORT).show();
-            }
+        forgotPassText.setOnClickListener(v -> {
+            startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
         });
     }
 
-    private boolean isValidEmail(String email) {
-        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    private void loginUser() {
+        String email = emailEditText.getText().toString().trim();
+        String password = passwordEditText.getText().toString().trim();
+
+        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+            Toast.makeText(this, "Please fill in the information completely!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        progressDialog.setMessage("Logging in...");
+        progressDialog.show();
+
+        auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, task -> {
+                    progressDialog.dismiss();
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = auth.getCurrentUser();
+                        if (user != null) {
+                            Toast.makeText(LoginActivity.this, "Loged in!", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            finish();
+                        }
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Log in failed!", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }
