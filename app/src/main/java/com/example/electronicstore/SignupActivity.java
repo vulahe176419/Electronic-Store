@@ -1,96 +1,78 @@
 package com.example.electronicstore;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.util.Patterns;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.AuthResult;
+
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class SignupActivity extends AppCompatActivity {
-    private TextInputEditText edemail, edpassword, edrppassword;
-    private Button btnsignup;
-    private TextView txtLogin;
-    private FirebaseAuth mAuth;
+
+    private EditText emailEditText, passwordEditText, confirmPasswordEditText;
+    private Button signupButton;
+    private TextView loginText;
+    private FirebaseAuth auth;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        edemail = findViewById(R.id.edemail);
-        edpassword = findViewById(R.id.edpassword);
-        edrppassword = findViewById(R.id.edrppassword);
-        btnsignup = findViewById(R.id.btnsignup);
-        txtLogin = findViewById(R.id.txtLogin);
-        mAuth = FirebaseAuth.getInstance();
+        emailEditText = findViewById(R.id.in_email);
+        passwordEditText = findViewById(R.id.in_password);
+        confirmPasswordEditText = findViewById(R.id.in_repassword);
+        signupButton = findViewById(R.id.btn_register);
+        loginText = findViewById(R.id.btn_login);
 
-        btnsignup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String email = edemail.getText().toString().trim();
-                String password = edpassword.getText().toString().trim();
-                String rppassword = edrppassword.getText().toString().trim();
+        auth = FirebaseAuth.getInstance();
+        progressDialog = new ProgressDialog(this);
 
-                if (email.isEmpty() || password.isEmpty() || rppassword.isEmpty()) {
-                    Toast.makeText(SignupActivity.this, "All fields are required!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (!password.equals(rppassword)) {
-                    Toast.makeText(SignupActivity.this, "Repeat password doesn't match!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (!isValidEmail(email)) {
-                    Toast.makeText(SignupActivity.this, "Invalid email address!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (password.length() < 6 || !Character.isUpperCase(password.charAt(0))) {
-                    Toast.makeText(SignupActivity.this, "Password must be at least 6 characters and start with an uppercase letter!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+        signupButton.setOnClickListener(v -> registerUser());
 
-                mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    Log.d(TAG, "createUserWithEmail:success");
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    Toast.makeText(SignupActivity.this, "Sign up success!", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(SignupActivity.this, HomeActivity.class);
-                                    startActivity(intent);
-                                    finish(); // Remove SignupActivity from back stack
-                                } else {
-                                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                    Toast.makeText(SignupActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-            }
-        });
-
-        txtLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent in = new Intent(SignupActivity.this, LoginActivity.class);
-                startActivity(in);
-            }
+        loginText.setOnClickListener(v -> {
+            startActivity(new Intent(SignupActivity.this, LoginActivity.class));
+            finish();
         });
     }
 
-    private boolean isValidEmail(String email) {
-        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    private void registerUser() {
+        String email = emailEditText.getText().toString().trim();
+        String password = passwordEditText.getText().toString().trim();
+        String confirmPassword = confirmPasswordEditText.getText().toString().trim();
+
+        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword)) {
+            Toast.makeText(this, "Please fill in the information completely!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!password.equals(confirmPassword)) {
+            Toast.makeText(this, "Re-Password doesn't match!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        progressDialog.setMessage("Signing up...");
+        progressDialog.show();
+
+        auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, task -> {
+                    progressDialog.dismiss();
+                    if (task.isSuccessful()) {
+                        Toast.makeText(SignupActivity.this, "Sign up successes!", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(SignupActivity.this, LoginActivity.class));
+                        finish();
+                    } else {
+                        Toast.makeText(SignupActivity.this, "Sign up failed!", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }
