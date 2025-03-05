@@ -9,6 +9,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.example.electronicstore.model.Product;
+
 import java.util.List;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
@@ -31,7 +34,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         Product product = productList.get(position);
         holder.productName.setText(product.getName());
         holder.productPrice.setText(product.getPrice());
-        holder.productImage.setImageResource(product.getImageResId());
+
+        // Load image using Glide
+        Glide.with(holder.itemView.getContext())
+                .load(product.getImageUrl())
+                .into(holder.productImage);
     }
 
     @Override

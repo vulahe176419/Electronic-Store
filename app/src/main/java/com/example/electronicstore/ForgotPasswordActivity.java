@@ -32,7 +32,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         resetPassButton.setOnClickListener(v -> resetPassword());
 
         loginText.setOnClickListener(v -> {
-            finish(); // Quay lại màn hình đăng nhập
+            finish();
         });
     }
 
@@ -47,7 +47,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         auth.sendPasswordResetEmail(email).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Toast.makeText(ForgotPasswordActivity.this, "Password reset email sent!", Toast.LENGTH_SHORT).show();
-                finish(); // Quay lại màn hình đăng nhập sau khi gửi thành công
+                finish();
             } else {
                 Toast.makeText(ForgotPasswordActivity.this, "Failed to send reset email!", Toast.LENGTH_SHORT).show();
             }
