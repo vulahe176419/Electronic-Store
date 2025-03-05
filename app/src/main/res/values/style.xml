@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomButton" parent="Widget.Material3.Button">
+        <item name="android:backgroundTint">#1599d6</item>  <!-- Button background color -->
+        <item name="android:textColor">#E7DADA</item>      <!-- Button text color -->
+    </style>
+</resources>
