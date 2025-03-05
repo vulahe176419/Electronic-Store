@@ -1,16 +1,16 @@
-package com.example.electronicstore;
+package com.example.electronicstore.model;
 
-public class Model {
+public class User {
 
     String email, name, password;
 
-    public Model(String email, String name, String password) {
+    public User(String email, String name, String password) {
         this.email = email;
         this.name = name;
         this.password = password;
     }
 
-    public Model() {
+    public User() {
     }
 
     public String getEmail() {
