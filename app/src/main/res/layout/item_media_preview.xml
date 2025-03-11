@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="4dp">
+
+    <!-- Hình ảnh hoặc video preview -->
+    <ImageView
+        android:id="@+id/imgMediaPreview"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:scaleType="centerCrop"
+        android:contentDescription="Media preview"/>
+
+    <!-- Nút xóa (dùng ImageView thay vì ImageButton) -->
+    <ImageView
+        android:id="@+id/btnRemove"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignTop="@id/imgMediaPreview"
+        android:layout_alignEnd="@id/imgMediaPreview"
+        android:src="@android:drawable/ic_delete"
+        android:padding="6dp"
+        android:scaleType="fitCenter"
+        android:contentDescription="Remove media"/>
+
+    <!-- Text mô tả loại media -->
+    <TextView
+        android:id="@+id/txtMediaType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imgMediaPreview"
+        android:textSize="12sp"
+        android:textColor="#666666"
+        android:gravity="center"
+        android:text="Image"/>
+</RelativeLayout>
