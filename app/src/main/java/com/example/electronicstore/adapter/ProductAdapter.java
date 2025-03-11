@@ -1,4 +1,4 @@
-package com.example.electronicstore;
+package com.example.electronicstore.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.electronicstore.R;
 import com.example.electronicstore.model.Product;
 
 import java.util.List;

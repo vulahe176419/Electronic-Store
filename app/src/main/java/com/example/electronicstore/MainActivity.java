@@ -5,13 +5,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
+import com.example.electronicstore.adapter.CategoryAdapter;
+import com.example.electronicstore.adapter.ProductAdapter;
 import com.example.electronicstore.model.Category;
 import com.example.electronicstore.model.Product;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -37,49 +37,36 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView categoryRecyclerView;
     private List<Category> categoryList;
     private CategoryAdapter categoryAdapter;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
-//        bottomNav.setOnItemSelectedListener(item -> {
-//            switch (item.getItemId()) {
-//                case R.id.nav_home:
-//                    // Reload the activity (restart the page)
-//                    Intent intent = getIntent();
-//                    finish();
-//                    startActivity(intent);
-//                    return true;
-////                case R.id.nav_category:
-////
-////                    loadFragment(new CategoryFragment());
-////                    return true;
-////                case R.id.nav_cart:
-////
-////                    loadFragment(new CartFragment());
-////                    return true;
-////                case R.id.nav_profile:
-////
-////                    loadFragment(new ProfileFragment());
-////                    return true;
-//            }
-//            return false;
-//        });
-//
-//
-//        private void loadFragment(Fragment fragment) {
-//            getSupportFragmentManager()
-//                    .beginTransaction()
-//                    .replace(R.id.fragment_container, fragment)
-//                    .commit();
-//        }
-
-
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2)); // 2 columns
 
+        bottomNavigationView = findViewById(R.id.bottomNav);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+                    int itemId = item.getItemId();
+                    if (itemId == R.id.nav_home) {
+                        startActivity(new Intent(MainActivity.this, MainActivity.class));
+                        return true;
+                    } else if (itemId == R.id.nav_category) {
+//                        startActivity(new Intent(MainActivity.this, CategoryActivity.class));
+                        return true;
+                    } else if (itemId == R.id.nav_cart) {
+//                        startActivity(new Intent(MainActivity.this, CartActivity.class));
+                        return true;
+                    } else if (itemId == R.id.nav_profile) {
+                        startActivity(new Intent(MainActivity.this, PersonalActivity.class));
+                        return true;
+                    } else {
+                        return false;
+                    }
+        });
 
         productList = new ArrayList<>();
         productAdapter = new ProductAdapter(productList);
@@ -108,13 +95,6 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
 
-//        logoutButton = findViewById(R.id.buttonLogout);
-//        logoutButton.setOnClickListener(v -> {
-//            auth.signOut();
-//            Toast.makeText(MainActivity.this, "Logged out!", Toast.LENGTH_SHORT).show();
-//            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-//            finish();
-//        });
     }
 
     private void fetchProductsFromFirebase() {

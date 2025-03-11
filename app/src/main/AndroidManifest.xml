@@ -13,16 +13,22 @@
         android:theme="@style/Theme.ElectronicStore"
         tools:targetApi="31">
         <activity
+            android:name=".PersonalActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminDashboardActivity"
+            android:exported="false" />
+        <activity
             android:name=".ForgotPasswordActivity"
             android:exported="false" />
         <activity
             android:name=".SignupActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,6 +36,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".UserManagerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddUserActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditUserActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

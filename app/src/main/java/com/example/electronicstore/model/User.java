@@ -2,9 +2,9 @@ package com.example.electronicstore.model;
 
 public class User {
 
-    String email, name, password;
+    String email, name, password, uid;
 
-    public User(String email, String name, String password) {
+    public User(String name, String email, String password) {
         this.email = email;
         this.name = name;
         this.password = password;
@@ -35,5 +35,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 }
