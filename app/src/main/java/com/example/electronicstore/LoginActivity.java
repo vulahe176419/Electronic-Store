@@ -67,7 +67,11 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser user = auth.getCurrentUser();
                         if (user != null) {
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            if (email.contains("@") && email.substring(email.indexOf("@")).contains("admin")) {
+                                startActivity(new Intent(LoginActivity.this, AdminDashboardActivity.class));
+                            } else {
+                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            }
                             finish();
                         }
                     } else {
