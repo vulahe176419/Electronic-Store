@@ -16,10 +16,16 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Edit account"
+        android:layout_marginTop="40dp"
+        android:text="Edit User"
         android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="40dp"
         android:textStyle="bold"
-        android:textSize="30dp" />
+        android:shadowColor="#80000000"
+        android:shadowDx="4"
+        android:shadowDy="4"
+        android:shadowRadius="4" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -30,8 +36,12 @@
     <EditText
         android:id="@+id/name_edit"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
+        android:layout_height="50dp"
+        android:drawableStart="@drawable/ic_name"
+        android:drawablePadding="10dp"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        android:textColor="@color/black"
         android:hint="Enter new name" />
 
     <TextView
@@ -43,7 +53,11 @@
     <EditText
         android:id="@+id/email_edit"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
+        android:drawableStart="@drawable/ic_email"
+        android:drawablePadding="10dp"
+        android:ems="10"
+        android:textColor="@color/black"
         android:inputType="textEmailAddress"
         android:hint="Enter new email" />
 
@@ -56,9 +70,13 @@
     <EditText
         android:id="@+id/password_edit"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
+        android:drawableStart="@drawable/ic_password"
+        android:drawablePadding="10dp"
+        android:ems="10"
         android:inputType="textPassword"
-        android:hint="Enter password" />
+        android:textColor="@color/black"
+        android:hint="Enter new password" />
 
     <Button
         android:id="@+id/save_button"
