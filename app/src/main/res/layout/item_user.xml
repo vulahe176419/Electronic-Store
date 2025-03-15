@@ -1,30 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="8dp"
-    android:gravity="center_vertical">
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    android:padding="8dp">
 
-<TextView
-android:id="@+id/user_name"
-android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_weight="1"
-    android:text="User Name"
-    android:textStyle="bold" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="User Name"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="?attr/colorOnSurface" />
 
-<TextView
-android:id="@+id/user_email"
-android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_weight="2"
-    android:text="user@example.com" />
+        <TextView
+            android:id="@+id/user_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="user@example.com"
+            android:textSize="14sp"
+            android:textColor="?attr/colorSecondary" />
 
-<Button
-android:id="@+id/edit_button"
-style="@style/CustomButton"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:text="Edit" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/edit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/CustomButton"
+            android:text="Edit"
+            android:textAllCaps="false"
+            android:textSize="14sp" />
     </LinearLayout>
+
+</androidx.cardview.widget.CardView>

@@ -45,9 +45,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2)); // 2 columns
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
         bottomNavigationView = findViewById(R.id.bottomNav);
+        auth = FirebaseAuth.getInstance();
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
                     int itemId = item.getItemId();
@@ -61,7 +62,11 @@ public class MainActivity extends AppCompatActivity {
 //                        startActivity(new Intent(MainActivity.this, CartActivity.class));
                         return true;
                     } else if (itemId == R.id.nav_profile) {
-                        startActivity(new Intent(MainActivity.this, PersonalActivity.class));
+                        if (auth.getCurrentUser() != null) {
+                            startActivity(new Intent(MainActivity.this, PersonalAfterLoginActivity.class));
+                        } else {
+                            startActivity(new Intent(MainActivity.this, PersonalActivity.class));
+                        }
                         return true;
                     } else {
                         return false;
@@ -87,13 +92,6 @@ public class MainActivity extends AppCompatActivity {
         categoryAdapter = new CategoryAdapter(categoryList, this);
         categoryRecyclerView.setAdapter(categoryAdapter);
 
-
-        auth = FirebaseAuth.getInstance();
-        FirebaseUser user = auth.getCurrentUser();
-        if (user == null) {
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            finish();
-        }
 
     }
 

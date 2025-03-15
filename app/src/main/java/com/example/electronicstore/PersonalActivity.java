@@ -31,7 +31,7 @@ public class PersonalActivity extends AppCompatActivity {
 
             loginText = findViewById(R.id.btn_login);
             signupText = findViewById(R.id.btn_signup);
-            logoutButton = findViewById(R.id.btn_logout);
+//            logoutButton = findViewById(R.id.btn_logout);
 
             loginText.setOnClickListener(v -> {
                 startActivity(new Intent(PersonalActivity.this, LoginActivity.class));
@@ -41,12 +41,12 @@ public class PersonalActivity extends AppCompatActivity {
                 startActivity(new Intent(PersonalActivity.this, SignupActivity.class));
             });
 
-            logoutButton.setOnClickListener(v -> {
-                auth.signOut();
-                Toast.makeText(PersonalActivity.this, "Logged out!", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(PersonalActivity.this, LoginActivity.class));
-                finish();
-            });
+//            logoutButton.setOnClickListener(v -> {
+//                auth.signOut();
+//                Toast.makeText(PersonalActivity.this, "Logged out!", Toast.LENGTH_SHORT).show();
+//                startActivity(new Intent(PersonalActivity.this, LoginActivity.class));
+//                finish();
+//            });
 
             bottomNavigationView = findViewById(R.id.bottomNav);
 
