@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/border"
+    android:contentDescription="Item địa chỉ"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <!-- RadioButton để chọn địa chỉ -->
+    <RadioButton
+        android:id="@+id/radio_select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="Chọn địa chỉ này" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <!-- Dòng 1: Tên và Nút Sửa -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/name_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:contentDescription="Tên địa chỉ: @string/name_text"
+                android:text="Tên"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/edit_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:contentDescription="Chỉnh sửa địa chỉ"
+                android:text="Sửa"
+                android:textColor="#E65100" />
+        </LinearLayout>
+
+        <!-- Dòng 2: Số điện thoại -->
+        <TextView
+            android:id="@+id/phone_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:contentDescription="Số điện thoại: @string/phone_text"
+            android:text="Số điện thoại"
+            android:textSize="14sp" />
+
+        <!-- Dòng 3: Địa chỉ -->
+        <TextView
+            android:id="@+id/address_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:contentDescription="Địa chỉ: @string/address_text"
+            android:text="Địa chỉ"
+            android:textSize="14sp" />
+
+        <!-- Dòng 4: Chữ "Mặc định" -->
+        <TextView
+            android:id="@+id/default_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:contentDescription="Địa chỉ mặc định"
+            android:text="Mặc định"
+            android:textColor="#E65100"
+            android:textSize="15sp"
+            android:visibility="gone" />
+    </LinearLayout>
+</LinearLayout>
