@@ -6,7 +6,6 @@
     android:background="#F5F5F5"
     android:padding="16dp">
 
-    <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -17,7 +16,7 @@
         android:titleTextColor="#000000"
         xmlns:app="http://schemas.android.com/apk/res-auto" />
 
-    <!-- RecyclerView for Cart Items -->
+    <!-- RecyclerView-->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cartRecyclerView"
         android:layout_width="match_parent"
@@ -26,7 +25,6 @@
         android:layout_above="@id/bottomLayout"
         android:layout_marginTop="8dp"/>
 
-    <!-- Bottom Summary Layout -->
     <LinearLayout
         android:id="@+id/bottomLayout"
         android:layout_width="match_parent"
@@ -76,7 +74,7 @@
                 android:id="@+id/shippingText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="15000 VND"
+                android:text="15.000 VND"
                 android:textSize="16sp"/>
         </LinearLayout>
 

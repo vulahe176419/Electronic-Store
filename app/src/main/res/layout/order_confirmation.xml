@@ -6,7 +6,6 @@
     android:background="#F5F5F5"
     android:padding="16dp">
 
-    <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -18,7 +17,6 @@
         android:titleTextColor="#000000"
         app:titleTextAppearance="@style/ToolbarTitleStyle" />
 
-    <!-- Nội dung chính -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -80,7 +78,7 @@
                     android:id="@+id/totalText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0 VND" />
+                    android:text="$0.00" />
             </LinearLayout>
 
             <LinearLayout
@@ -98,6 +96,25 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="N/A" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="4dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Shipping Address"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/addressText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="N/A"
+                    android:maxLines="2"
+                    android:ellipsize="end" />
             </LinearLayout>
         </LinearLayout>
 

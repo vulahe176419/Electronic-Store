@@ -51,10 +51,7 @@
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".CartActivity"
-            android:exported="true"/>
-        <activity
-            android:name=".ProductReviewsActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -71,9 +68,9 @@
         <activity
             android:name=".EditUserActivity"
             android:exported="false" />
-<!--        <activity-->
-<!--            android:name=".CartActivity"-->
-<!--            android:exported="false" />-->
+        <activity
+            android:name=".CartActivity"
+            android:exported="false" />
         <activity
             android:name=".CheckoutActivity"
             android:exported="false"

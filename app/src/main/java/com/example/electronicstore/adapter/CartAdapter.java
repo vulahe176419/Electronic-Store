@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.example.electronicstore.R;
 import com.example.electronicstore.model.Cart;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
@@ -50,9 +51,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 .placeholder(R.drawable.ic_launcher_background)
                 .error(R.drawable.ic_launcher_foreground)
                 .into(holder.itemImage);
-
+        DecimalFormat formatter = new DecimalFormat("#,###");
         holder.itemName.setText(item.getProductName());
-        holder.itemPrice.setText(String.format("%.0f VND", item.getPrice()));
+        holder.itemPrice.setText((formatter.format(item.getPrice()) + " VND"));
         holder.itemQuantity.setText(String.valueOf(item.getQuantity()));
 
         // Nút giảm số lượng
