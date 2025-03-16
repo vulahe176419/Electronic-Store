@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:layout_marginBottom="8dp"
+    android:background="#FFFFFF">
+
+    <!-- Phần trên cùng: Ảnh đại diện, tên người dùng, đánh giá, và nút Thích -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <!-- Ảnh đại diện -->
+        <ImageView
+            android:id="@+id/imgUserAvatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_profile"
+            android:layout_marginRight="8dp"
+            android:contentDescription="Ảnh đại diện người dùng"/>
+
+        <!-- Tên người dùng và đánh giá -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tên người dùng"
+                android:textSize="16sp"/>
+
+            <RatingBar
+                android:id="@+id/ratingBarReview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:stepSize="0.5"
+                android:isIndicator="true"
+                android:rating="0"
+                android:contentDescription="Đánh giá sao"/>
+        </LinearLayout>
+
+        <!-- Nút Thích (sử dụng TextView với biểu tượng mới) -->
+        <TextView
+            android:id="@+id/btnLike"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="17"
+        android:textSize="14sp"
+        android:drawableStart="@drawable/ic_like"
+        android:drawablePadding="4dp"
+        android:padding="4dp"
+        android:contentDescription="Nút thích đánh giá"/>
+    </LinearLayout>
+
+    <!-- Phân loại -->
+    <TextView
+        android:id="@+id/txtVariant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Phân loại: Không có"
+        android:textSize="14sp"
+        android:layout_marginTop="4dp"/>
+
+    <!-- Bình luận -->
+    <TextView
+        android:id="@+id/txtComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bình luận..."
+        android:textSize="16sp"
+        android:layout_marginTop="4dp"
+        android:contentDescription="Nội dung bình luận của người dùng"/>
+
+    <!-- Hình ảnh -->
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="4dp"
+        android:contentDescription="Bộ sưu tập hình ảnh đánh giá">
+
+    <LinearLayout
+        android:id="@+id/mediaContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+    </LinearLayout>
+</HorizontalScrollView>
+
+    <!-- Phản hồi từ người bán -->
+    <TextView
+        android:id="@+id/txtSellerReply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Phản hồi của Người bán: ..."
+        android:textSize="12sp"
+        android:textColor="#666666"
+        android:layout_marginTop="4dp"
+        android:visibility="gone"
+        android:contentDescription="Phản hồi từ người bán"/>
+
+    <!-- Nút Trả lời -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/btnReply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trả lời"
+            android:background="@drawable/filter_button_background"
+            android:layout_marginTop="4dp"
+            android:contentDescription="Nút trả lời đánh giá"/>
+    </LinearLayout>
+</LinearLayout>
