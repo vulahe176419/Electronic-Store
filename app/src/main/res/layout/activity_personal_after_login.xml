@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/btn_logout"
+            android:id="@+id/btn_logoutt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
@@ -35,7 +35,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/address"
+        android:id="@+id/btn_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="153dp"
@@ -43,7 +43,7 @@
         android:layout_marginBottom="372dp"
         android:backgroundTint="#2196F3"
         android:text="Address"
-        app:layout_constraintBottom_toTopOf="@+id/btn_logout"
+        app:layout_constraintBottom_toTopOf="@+id/btn_logoutt"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
