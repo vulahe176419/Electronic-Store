@@ -51,7 +51,7 @@
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ManageAddress"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -88,9 +88,9 @@
         <activity
             android:name=".RateProduct"
             android:exported="false" />
-        <activity
-            android:name=".ManageAddress"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".ManageAddress"-->
+<!--            android:exported="false" />-->
     </application>
 
 </manifest>
