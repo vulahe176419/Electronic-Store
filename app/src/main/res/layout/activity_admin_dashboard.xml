@@ -7,34 +7,40 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="91dp"
-        android:text="Dashboard"
+        android:layout_height="wrap_content"
+        android:text="Admin Dashboard"
         android:textAlignment="center"
-        android:textSize="30dp"
-        android:textStyle="bold" />
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="32dp" />
 
     <TextView
         android:id="@+id/user_manager"
         android:layout_width="match_parent"
-        android:layout_height="61dp"
+        android:layout_height="wrap_content"
         android:text="User Manager"
         android:textAlignment="center"
-        android:textSize="20dp"
-        android:textStyle="bold" />
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginBottom="16dp" />
 
     <TextView
         android:id="@+id/Product_manager"
         android:layout_width="match_parent"
-        android:layout_height="61dp"
+        android:layout_height="wrap_content"
         android:text="Product Manager"
         android:textAlignment="center"
-        android:textSize="20dp"
-        android:textStyle="bold" />
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginBottom="16dp" />
 
     <Button
         android:id="@+id/btn_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/red"
-        android:text="Log out" />
+        android:text="Log out"
+        android:layout_gravity="center" />
 </LinearLayout>
