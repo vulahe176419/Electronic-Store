@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Back & Save Icon -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_back"
+                android:contentDescription="Back"
+                android:layout_marginEnd="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit Profile"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_check"
+                android:contentDescription="Save"/>
+        </LinearLayout>
+
+        <!-- Profile Picture -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingTop="20dp">
+
+            <ImageView
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:src="@drawable/ic_avatar"
+                android:scaleType="centerCrop"/>
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_camera"
+                android:contentDescription="Edit Profile Picture"
+                android:layout_marginTop="-20dp"/>
+        </LinearLayout>
+
+        <!-- Input Fields -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/edit_text_background"
+            android:text="Charlotte King"
+            android:padding="12dp"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Email address"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginTop="12dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/edit_text_background"
+            android:text="@johnkinggraphics.gmail.com"
+            android:padding="12dp"
+            android:textSize="14sp"
+            android:inputType="textEmailAddress"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="User name"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginTop="12dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/edit_text_background"
+            android:text="@johnkinggraphics"
+            android:padding="12dp"
+            android:textSize="14sp"
+            android:inputType="text"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Password"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginTop="12dp"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/edit_text_background">
+
+            <EditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="12dp"
+                android:textSize="14sp"
+                android:inputType="textPassword"
+                android:hint="**************"/>
+
+            <ImageView
+                android:id="@+id/ivTogglePassword"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="12dp"
+                android:src="@drawable/ic_visibility"/>
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Phone number"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginTop="12dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/edit_text_background"
+            android:text="+91   6895312"
+            android:padding="12dp"
+            android:textSize="14sp"
+            android:inputType="phone"/>
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Save"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:backgroundTint="@color/red"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp"/>
+    </LinearLayout>
+</ScrollView>
