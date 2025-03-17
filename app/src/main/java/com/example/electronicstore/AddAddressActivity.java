@@ -1,13 +1,16 @@
 package com.example.electronicstore;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -33,11 +36,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.example.electronicstore.model.Address;
 import java.io.IOException;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class AddAddressActivity extends AppCompatActivity {
 
     private static final int REQUEST_LOCATION_PERMISSION = 1001;
     private static final int REQUEST_SELECT_MAP = 1002;
+    private static final int REQUEST_ENABLE_LOCATION = 1003;
+    private static final Pattern PHONE_PATTERN = Pattern.compile("^[0-9]{10}$");
+    private static final long LOCATION_TIMEOUT = 5000; // 5 giây
 
     private EditText editName, editPhone, editAddress;
     private CheckBox checkDefault;
@@ -48,52 +55,38 @@ public class AddAddressActivity extends AppCompatActivity {
     private Address addressToEdit;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
+    private Handler timeoutHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_address);
 
+        initializeFirebase();
+        initializeViews();
+        setupLocationServices();
+        setupListeners();
+
+        if (getIntent().hasExtra("address")) {
+            addressToEdit = (Address) getIntent().getSerializableExtra("address");
+            populateFields(addressToEdit);
+            deleteButton.setVisibility(View.VISIBLE);
+        } else {
+            deleteButton.setVisibility(View.GONE);
+        }
+    }
+
+    private void initializeFirebase() {
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() == null) {
-            Intent intent = new Intent(AddAddressActivity.this, LoginActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(this, LoginActivity.class));
             finish();
             return;
         }
-
         mDatabase = FirebaseDatabase.getInstance().getReference("addresses");
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+    }
 
-        // Khởi tạo LocationCallback
-        locationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                if (locationResult == null) {
-                    Log.d("AddAddress", "LocationResult is null");
-                    return;
-                }
-                Location location = locationResult.getLastLocation();
-                if (location != null) {
-                    Log.d("AddAddress", "Location received: " + location.getLatitude() + ", " + location.getLongitude());
-                    try {
-                        Geocoder geocoder = new Geocoder(AddAddressActivity.this);
-                        List<android.location.Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                        if (addresses != null && !addresses.isEmpty()) {
-                            editAddress.setText(addresses.get(0).getAddressLine(0));
-                        } else {
-                            editAddress.setText("Lat: " + location.getLatitude() + ", Lng: " + location.getLongitude());
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        Toast.makeText(AddAddressActivity.this, "Lỗi khi lấy địa chỉ: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                    // Dừng cập nhật vị trí sau khi nhận được kết quả
-                    fusedLocationClient.removeLocationUpdates(locationCallback);
-                }
-            }
-        };
-
+    private void initializeViews() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Địa chỉ mới");
@@ -108,51 +101,107 @@ public class AddAddressActivity extends AppCompatActivity {
         tilPhone = findViewById(R.id.til_phone);
         tilAddress = findViewById(R.id.til_address);
         deleteButton = findViewById(R.id.delete_button);
-        Button btnUseCurrentLocation = findViewById(R.id.btn_use_current_location);
-        Button btnSelectLocationOnMap = findViewById(R.id.btn_select_location_on_map);
-        Button btnComplete = findViewById(R.id.complete_button);
+    }
 
-        if (getIntent().hasExtra("address")) {
-            addressToEdit = (Address) getIntent().getSerializableExtra("address");
-            populateFields(addressToEdit);
-            deleteButton.setVisibility(View.VISIBLE);
-        } else {
-            deleteButton.setVisibility(View.GONE);
-        }
-
-        btnUseCurrentLocation.setOnClickListener(v -> {
-            Log.d("AddAddress", "Button clicked");
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION_PERMISSION);
-            } else {
-                requestCurrentLocation();
+    private void setupLocationServices() {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        timeoutHandler = new Handler(Looper.getMainLooper());
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    Toast.makeText(AddAddressActivity.this, "Không thể cập nhật vị trí", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Location location = locationResult.getLastLocation();
+                if (location != null) {
+                    updateAddressFromLocation(location);
+                    stopLocationUpdates();
+                } else {
+                    Toast.makeText(AddAddressActivity.this, "Đang chờ vị trí mới...", Toast.LENGTH_SHORT).show();
+                }
             }
-        });
+        };
+    }
 
-        btnSelectLocationOnMap.setOnClickListener(v -> {
-            Intent intent = new Intent(AddAddressActivity.this, MapActivity.class);
-            startActivityForResult(intent, REQUEST_SELECT_MAP);
-        });
-
-        btnComplete.setOnClickListener(v -> saveAddress());
-
+    private void setupListeners() {
+        findViewById(R.id.btn_use_current_location).setOnClickListener(v -> requestLocation());
+        findViewById(R.id.btn_select_location_on_map).setOnClickListener(v ->
+                startActivityForResult(new Intent(this, MapActivity.class), REQUEST_SELECT_MAP));
+        findViewById(R.id.complete_button).setOnClickListener(v -> saveAddress());
         deleteButton.setOnClickListener(v -> deleteAddress());
     }
 
-    private void requestCurrentLocation() {
-        LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setNumUpdates(1); // Chỉ lấy vị trí 1 lần
+    private void requestLocation() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                    REQUEST_LOCATION_PERMISSION);
+        } else if (!isLocationEnabled()) {
+            Toast.makeText(this, "Vui lòng bật dịch vụ định vị", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivityForResult(intent, REQUEST_ENABLE_LOCATION);
+        } else {
+            requestCurrentLocation();
+        }
+    }
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Log.d("AddAddress", "Permissions not granted");
+    private boolean isLocationEnabled() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        return locationManager != null &&
+                (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                        locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER));
+    }
+
+    private void requestCurrentLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
             return;
         }
+
+        Toast.makeText(this, "Đang cập nhật vị trí...", Toast.LENGTH_SHORT).show();
+
+        LocationRequest locationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(500) // Cập nhật mỗi 1 giây
+                .setFastestInterval(100); // Nhận cập nhật nhanh nhất có thể
+
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
+                .addOnSuccessListener(aVoid -> {
+                    // Bắt đầu yêu cầu, chờ callback
+                    timeoutHandler.postDelayed(() -> {
+                        if (fusedLocationClient != null) {
+                            fusedLocationClient.removeLocationUpdates(locationCallback);
+                            Toast.makeText(this, "Hết thời gian chờ vị trí", Toast.LENGTH_SHORT).show();
+                        }
+                    }, LOCATION_TIMEOUT);
+                })
                 .addOnFailureListener(e -> {
-                    Log.d("AddAddress", "Failed to request location: " + e.getMessage());
-                    Toast.makeText(this, "Lỗi khi lấy vị trí: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Lỗi yêu cầu vị trí: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
+    }
+
+    private void stopLocationUpdates() {
+        if (fusedLocationClient != null && locationCallback != null) {
+            fusedLocationClient.removeLocationUpdates(locationCallback);
+            timeoutHandler.removeCallbacksAndMessages(null); // Hủy timeout
+        }
+    }
+
+    private void updateAddressFromLocation(Location location) {
+        try {
+            Geocoder geocoder = new Geocoder(this);
+            List<android.location.Address> addresses = geocoder.getFromLocation(
+                    location.getLatitude(), location.getLongitude(), 1);
+            if (addresses != null && !addresses.isEmpty()) {
+                editAddress.setText(addresses.get(0).getAddressLine(0));
+            } else {
+                editAddress.setText("Lat: " + location.getLatitude() + ", Lng: " + location.getLongitude());
+            }
+        } catch (IOException e) {
+            Toast.makeText(this, "Không thể lấy địa chỉ", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void populateFields(Address address) {
@@ -170,7 +219,13 @@ public class AddAddressActivity extends AppCompatActivity {
             if (selectedAddress != null) {
                 editAddress.setText(selectedAddress);
             } else {
-                Toast.makeText(this, "Không thể lấy địa chỉ từ vị trí đã chọn", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Không thể lấy địa chỉ", Toast.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == REQUEST_ENABLE_LOCATION) {
+            if (isLocationEnabled()) {
+                requestCurrentLocation();
+            } else {
+                Toast.makeText(this, "Dịch vụ định vị vẫn chưa được bật", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -180,36 +235,10 @@ public class AddAddressActivity extends AppCompatActivity {
         String phone = editPhone.getText().toString().trim();
         String addressLine1 = editAddress.getText().toString().trim();
 
-        tilName.setError(null);
-        tilPhone.setError(null);
-        tilAddress.setError(null);
-
-        boolean hasError = false;
-        if (name.isEmpty()) {
-            tilName.setError("Vui lòng nhập họ và tên");
-            hasError = true;
-        }
-        if (phone.isEmpty()) {
-            tilPhone.setError("Vui lòng nhập số điện thoại");
-            hasError = true;
-        }
-        if (addressLine1.isEmpty()) {
-            tilAddress.setError("Vui lòng nhập địa chỉ");
-            hasError = true;
-        }
-
-        if (hasError) {
-            return;
-        }
+        if (!validateInputs(name, phone, addressLine1)) return;
 
         String userId = mAuth.getCurrentUser().getUid();
-        Address address = new Address(
-                name,
-                userId,
-                addressLine1,
-                phone,
-                checkDefault.isChecked()
-        );
+        Address address = new Address(name, userId, addressLine1, phone, checkDefault.isChecked());
 
         if (addressToEdit != null) {
             address.setKey(addressToEdit.getKey());
@@ -217,6 +246,30 @@ public class AddAddressActivity extends AppCompatActivity {
         } else {
             addNewAddress(address);
         }
+    }
+
+    private boolean validateInputs(String name, String phone, String address) {
+        tilName.setError(null);
+        tilPhone.setError(null);
+        tilAddress.setError(null);
+
+        boolean isValid = true;
+        if (name.isEmpty()) {
+            tilName.setError("Vui lòng nhập họ và tên");
+            isValid = false;
+        }
+        if (phone.isEmpty()) {
+            tilPhone.setError("Vui lòng nhập số điện thoại");
+            isValid = false;
+        } else if (!PHONE_PATTERN.matcher(phone).matches()) {
+            tilPhone.setError("Số điện thoại không hợp lệ (10 chữ số)");
+            isValid = false;
+        }
+        if (address.isEmpty()) {
+            tilAddress.setError("Vui lòng nhập địa chỉ");
+            isValid = false;
+        }
+        return isValid;
     }
 
     private void addNewAddress(Address address) {
@@ -292,14 +345,13 @@ public class AddAddressActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.d("AddAddress", "Location permission granted");
-                requestCurrentLocation();
+                requestLocation();
             } else {
-                Log.d("AddAddress", "Location permission denied");
                 Toast.makeText(this, "Quyền truy cập vị trí bị từ chối", Toast.LENGTH_SHORT).show();
             }
         }
@@ -308,8 +360,6 @@ public class AddAddressActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (fusedLocationClient != null && locationCallback != null) {
-            fusedLocationClient.removeLocationUpdates(locationCallback);
-        }
+        stopLocationUpdates();
     }
 }

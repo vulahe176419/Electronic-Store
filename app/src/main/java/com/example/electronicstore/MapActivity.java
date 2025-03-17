@@ -48,7 +48,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
-
         LatLng defaultLocation = new LatLng(21.0285, 105.8542);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 15f));
         mMap.setOnMapClickListener(this);
@@ -59,20 +58,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         if (selectedMarker != null) {
             selectedMarker.remove();
         }
-
         selectedMarker = mMap.addMarker(new MarkerOptions().position(latLng).title("Vị trí đã chọn"));
         selectedLatLng = latLng;
         btnConfirmLocation.setEnabled(true);
     }
 
     private void convertLatLngToAddress(LatLng latLng) {
-        Geocoder geocoder = new Geocoder(this);
         try {
+            Geocoder geocoder = new Geocoder(this);
             List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
             if (addresses != null && !addresses.isEmpty()) {
                 String address = addresses.get(0).getAddressLine(0);
-                Log.d("MapActivity", "Selected address: " + address);
-
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("selected_address", address);
                 setResult(RESULT_OK, resultIntent);
@@ -81,9 +77,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 Toast.makeText(this, "Không thể lấy địa chỉ từ vị trí này", Toast.LENGTH_SHORT).show();
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            Log.d("MapActivity", "Geocoder error: " + e.getMessage());
-            Toast.makeText(this, "Lỗi khi lấy địa chỉ: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.e("MapActivity", "Geocoder error: " + e.getMessage());
+            Toast.makeText(this, "Lỗi khi lấy địa chỉ", Toast.LENGTH_SHORT).show();
         }
     }
 }
