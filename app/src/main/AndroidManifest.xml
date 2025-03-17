@@ -71,6 +71,8 @@
         <activity
             android:name=".EditUserActivity"
             android:exported="false" />
+        <activity
+            android:name=".SettingsActivity"
 <!--        <activity-->
 <!--            android:name=".CartActivity"-->
 <!--            android:exported="false" />-->
