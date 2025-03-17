@@ -78,6 +78,7 @@
             android:name=".CheckoutActivity"
             android:exported="false"
             android:label="Checkout" />
+
         <activity
             android:name=".OrderConfirmationActivity"
             android:exported="false"
