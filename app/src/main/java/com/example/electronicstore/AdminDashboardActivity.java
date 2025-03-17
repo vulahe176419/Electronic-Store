@@ -6,11 +6,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -27,7 +23,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         userManagerText = findViewById(R.id.user_manager);
-        logoutButton = findViewById(R.id.btn_logout);
+        logoutButton = findViewById(R.id.btn_logoutt);
 
         userManagerText.setOnClickListener(v -> {
             startActivity(new Intent(AdminDashboardActivity.this, UserManagerActivity.class));

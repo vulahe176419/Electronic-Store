@@ -71,7 +71,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@johnkinggraphics"
+                    android:text="johnkinggraphics"
                     android:textSize="14sp"
                     android:textColor="#777777"/>
             </LinearLayout>
@@ -125,25 +125,26 @@
 
             <!-- Location -->
             <LinearLayout
+                android:id="@+id/btn_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp"
-                android:gravity="center_vertical"
+                android:background="?attr/selectableItemBackground"
                 android:clickable="true"
-                android:background="?attr/selectableItemBackground">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="12dp">
 
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_location"/>
+                    android:src="@drawable/ic_location" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
                     android:text="Location"
-                    android:textSize="14sp"
-                    android:layout_marginStart="16dp"/>
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <!-- Downloads -->
@@ -194,25 +195,26 @@
 
             <!-- Logout -->
             <LinearLayout
+                android:id="@+id/btn_logoutt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp"
-                android:gravity="center_vertical"
+                android:background="?attr/selectableItemBackground"
                 android:clickable="true"
-                android:background="?attr/selectableItemBackground">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="12dp">
 
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/logout"/>
+                    android:src="@drawable/logout" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
                     android:text="Log out"
-                    android:textSize="14sp"
-                    android:layout_marginStart="16dp"/>
+                    android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
