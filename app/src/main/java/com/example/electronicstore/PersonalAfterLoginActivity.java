@@ -19,6 +19,8 @@ public class PersonalAfterLoginActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private Button logoutButton;
+
+    private Button addressButton;
     private BottomNavigationView bottomNavigationView;
 
     @Override
@@ -61,5 +63,12 @@ public class PersonalAfterLoginActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        addressButton = findViewById(R.id.address);
+        addressButton.setOnClickListener(v -> {
+            Intent intent = new Intent(PersonalAfterLoginActivity.this, ManageAddress.class);
+            startActivity(intent);
+        });
+
     }
 }
