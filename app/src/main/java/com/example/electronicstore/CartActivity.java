@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -119,9 +120,9 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnCar
         }
         double shipping = 15000;
         double total = subtotal + shipping;
-
-        subtotalText.setText(String.format("%,.0f VND", subtotal));
-        totalText.setText(String.format("%,.0f VND", total));
+        DecimalFormat formatter = new DecimalFormat("#,###");
+        subtotalText.setText(formatter.format(subtotal) + " VND");
+        totalText.setText(formatter.format(total) + " VND");
     }
 
     @Override
