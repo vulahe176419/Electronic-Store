@@ -21,8 +21,10 @@ import java.util.Objects;
 public class CheckoutActivity extends AppCompatActivity {
     private TextView subtotalText, shippingText, totalText;
     private RadioGroup paymentMethodsGroup, addressRadioGroup;
-    private double subtotal, shipping = 15000, total;
-    private String uid = "P66DVircwtPMiHxmkBeLvLOxbV13";
+    private double subtotal;
+    private final double shipping = 15000;
+    private double total;
+    private final String uid = "P66DVircwtPMiHxmkBeLvLOxbV13";
     private DatabaseReference databaseReference;
 
     @Override

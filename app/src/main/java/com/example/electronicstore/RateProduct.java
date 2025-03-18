@@ -39,7 +39,7 @@ public class RateProduct extends AppCompatActivity {
     private CheckBox chkAnonymous;
     private Button btnSubmit, btnAddImage, btnAddVideo;
     private RecyclerView recyclerViewMediaPreview;
-    private List<Uri> mediaList = new ArrayList<>();
+    private final List<Uri> mediaList = new ArrayList<>();
     private MediaPreviewAdapter mediaPreviewAdapter;
     private DatabaseReference reviewsRef;
     private ActivityResultLauncher<String> pickImage;
@@ -147,7 +147,7 @@ public class RateProduct extends AppCompatActivity {
 
     // Adapter để hiển thị danh sách media đã chọn
     private class MediaPreviewAdapter extends RecyclerView.Adapter<MediaPreviewAdapter.MediaViewHolder> {
-        private List<Uri> mediaUris;
+        private final List<Uri> mediaUris;
 
         public MediaPreviewAdapter(List<Uri> mediaUris) {
             this.mediaUris = mediaUris;

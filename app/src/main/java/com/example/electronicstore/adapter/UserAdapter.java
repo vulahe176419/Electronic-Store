@@ -12,7 +12,7 @@ import com.example.electronicstore.model.User;
 import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
-    private List<User> users;
+    private final List<User> users;
     private OnUserClickListener listener;
 
     public interface OnUserClickListener {

@@ -41,12 +41,12 @@ public class ProductReviewsActivity extends AppCompatActivity {
     private TextView txtNoReviews;
     private Button btnFilterAll, btnFilterMedia, btnFilterStar, btnFilterVariant;
     private DatabaseReference reviewsRef, usersRef;
-    private List<Review> reviewList = new ArrayList<>();
+    private final List<Review> reviewList = new ArrayList<>();
     private ReviewAdapter reviewAdapter;
     private String productId;
     private String currentUserId;
     private boolean isAdmin = false;
-    private HashMap<String, Boolean> userLikesMap = new HashMap<>();
+    private final HashMap<String, Boolean> userLikesMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
