@@ -12,7 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class AdminDashboardActivity extends AppCompatActivity {
     private FirebaseAuth auth;
-    private TextView userManagerText;
+    private TextView userManagerText, productManagerText;
     private Button logoutButton;
 
     @Override
@@ -23,10 +23,15 @@ public class AdminDashboardActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         userManagerText = findViewById(R.id.user_manager);
+        productManagerText= findViewById(R.id.product_manager);
         logoutButton = findViewById(R.id.btn_logoutt);
 
         userManagerText.setOnClickListener(v -> {
             startActivity(new Intent(AdminDashboardActivity.this, UserManagerActivity.class));
+        });
+
+        productManagerText.setOnClickListener(v -> {
+            startActivity(new Intent(AdminDashboardActivity.this, ProductManagerActivity.class));
         });
 
         logoutButton.setOnClickListener(v -> {

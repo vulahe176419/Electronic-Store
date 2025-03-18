@@ -8,19 +8,19 @@
     <TextView
         android:id="@+id/btn_back"
         android:layout_width="wrap_content"
-        android:textStyle="bold"
-        android:textSize="17dp"
         android:layout_height="wrap_content"
-        android:text="Back" />
+        android:text="Back"
+        android:textStyle="bold"
+        android:textSize="17sp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="Edit User"
+        android:text="Add new product"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="40dp"
+        android:textSize="40sp"
         android:textStyle="bold"
         android:shadowColor="#80000000"
         android:shadowDx="4"
@@ -34,61 +34,78 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/name_edit"
+        android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:drawableStart="@drawable/ic_name"
         android:drawablePadding="10dp"
         android:ems="10"
-        android:inputType="textEmailAddress"
+        android:inputType="text"
         android:textColor="@color/black"
-        android:hint="Enter new name" />
+        android:hint="Enter product name" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Email:"
+        android:text="Category:"
         android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/email_edit"
+    <Spinner
+        android:id="@+id/category_spinner"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:drawableStart="@drawable/ic_email"
-        android:drawablePadding="10dp"
-        android:ems="10"
-        android:textColor="@color/black"
-        android:inputType="textEmailAddress"
-        android:hint="Enter new email" />
+        android:layout_height="wrap_content" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Password:"
+        android:text="Detail:"
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/password_edit"
+        android:id="@+id/detail"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:drawableStart="@drawable/ic_password"
         android:drawablePadding="10dp"
         android:ems="10"
-        android:inputType="textPassword"
+        android:inputType="text"
         android:textColor="@color/black"
-        android:hint="Enter new password" />
+        android:hint="Enter product detail" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Price:"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/price"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:drawablePadding="10dp"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        android:textColor="@color/black"
+        android:hint="Enter price" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Image URL:"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/imageUrl"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:drawablePadding="10dp"
+        android:ems="10"
+        android:inputType="textUri"
+        android:textColor="@color/black"
+        android:hint="Enter image URL" />
 
     <Button
-        android:id="@+id/save_button"
+        android:id="@+id/submit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         style="@style/CustomButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Save" />
-
-    <Button
-        android:id="@+id/delete_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/red"
-        android:text="Delete" />
+        android:text="Add Product" />
 </LinearLayout>

@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Electronic Store</string>
-<!--    <string name="name_text">Tên</string>-->
-<!--    <string name="address_text">Địa chỉ</string>-->
-<!--    <string name="phone_text">Số điện thoại</string>-->
+    <!--    <string name="name_text">Tên</string>-->
+    <!--    <string name="address_text">Địa chỉ</string>-->
+    <!--    <string name="phone_text">Số điện thoại</string>-->
     <string-array name="address_types">
         <item>Nhà riêng</item>
         <item>Nơi làm việc</item>

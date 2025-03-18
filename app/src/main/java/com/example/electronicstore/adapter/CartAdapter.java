@@ -19,8 +19,8 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
-    private List<Cart> carts;
-    private OnCartItemChangeListener listener;
+    private final List<Cart> carts;
+    private final OnCartItemChangeListener listener;
 
     // Interface để thông báo thay đổi số lượng hoặc xóa item
     public interface OnCartItemChangeListener {

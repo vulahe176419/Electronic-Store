@@ -26,7 +26,7 @@
         android:layout_marginBottom="16dp" />
 
     <TextView
-        android:id="@+id/Product_manager"
+        android:id="@+id/product_manager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Product Manager"

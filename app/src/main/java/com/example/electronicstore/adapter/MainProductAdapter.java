@@ -1,45 +1,40 @@
 package com.example.electronicstore.adapter;
 
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log; // Import Log
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.example.electronicstore.ProductDetailActivity;
 import com.example.electronicstore.R;
 import com.example.electronicstore.model.Product;
-import com.example.electronicstore.ProductManagerActivity;
 import com.squareup.picasso.Picasso;
 import java.util.List;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
+public class MainProductAdapter extends RecyclerView.Adapter<MainProductAdapter.ViewHolder> {
     private List<Product> products;
-    private OnProductClickListener listener;
+    private final Context context;
 
-    public interface OnProductClickListener {
-        void onProductClick(Product product, String productId);
-    }
-
-    public ProductAdapter(List<Product> products, ProductManagerActivity productManagerActivity) {
+    public MainProductAdapter(List<Product> products, Context context) {
         this.products = products;
+        this.context = context;
     }
 
-    public void setOnProductClickListener(OnProductClickListener listener) {
-        this.listener = listener;
-    }
-
-    @NonNull
     @Override
-    public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_product_manager, parent, false);
-        return new ProductViewHolder(view);
+                .inflate(R.layout.item_product, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         Product product = products.get(position);
         holder.productName.setText(product.getName());
 
@@ -47,10 +42,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.productPrice.setText(priceString);
         Picasso.get().load(product.getImageUrl()).into(holder.productImage);
 
-        holder.editButton.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onProductClick(product, product.getPid());
-            }
+        Glide.with(context).load(product.getImageUrl()).into(holder.productImage);
+        holder.itemView.setOnClickListener(view -> {
+            Intent intent = new Intent(context, ProductDetailActivity.class);
+            intent.putExtra("name", product.getName());
+            intent.putExtra("price", "$" + product.getPrice());
+            intent.putExtra("description", product.getDetail());
+            intent.putExtra("imageUrl", product.getImageUrl());
+            context.startActivity(intent);
         });
     }
 
@@ -64,18 +63,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         notifyDataSetChanged();
     }
 
-    public static class ProductViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView productImage;
-        TextView productName;
-        TextView productPrice;
-        Button editButton;
+        TextView productName, productPrice;
 
-        public ProductViewHolder(@NonNull View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
             productImage = itemView.findViewById(R.id.productImage);
             productName = itemView.findViewById(R.id.productName);
             productPrice = itemView.findViewById(R.id.productPrice);
-            editButton = itemView.findViewById(R.id.edit_button);
         }
     }
 }

@@ -18,8 +18,8 @@ import java.util.List;
 
 public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressViewHolder> {
     private List<Address> addressList = new ArrayList<>();
-    private OnAddressSelectedListener listener;
-    private Context context;
+    private final OnAddressSelectedListener listener;
+    private final Context context;
     private int selectedPosition = -1;
 
     public AddressAdapter(Context context, List<Address> addressList, OnAddressSelectedListener listener) {

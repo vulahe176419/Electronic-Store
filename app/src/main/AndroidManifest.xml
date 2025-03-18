@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
-    <!-- Quyền truy cập internet -->
     <uses-permission android:name="android.permission.INTERNET" />
-
-    <!-- Quyền truy cập hình ảnh và video -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
-
-    <!-- Hỗ trợ Android 12 trở xuống -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
-
-    <!-- Quyền truy cập vị trí -->
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" /> <!-- Quyền truy cập vị trí -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
@@ -26,15 +20,31 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ElectronicStore"
         tools:targetApi="31">
+        <activity
+            android:name=".FilteredProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CategoryFilterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddCategoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProductDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProductManagerActivity"
+            android:exported="false" />
 
-        <!-- API Key cho Google Maps -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCm7InBFhYJqdbPLmfa_LgqrjAz7T61k6s" />
-
-        <activity
-            android:name=".PersonalAfterLoginActivity"
-            android:exported="false" />
         <activity
             android:name=".PersonalActivity"
             android:exported="false" />
@@ -52,13 +62,12 @@
             android:exported="false" />
         <activity
             android:name=".ManageAddress"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -81,7 +90,6 @@
             android:name=".CheckoutActivity"
             android:exported="false"
             android:label="Checkout" />
-
         <activity
             android:name=".OrderConfirmationActivity"
             android:exported="false"
