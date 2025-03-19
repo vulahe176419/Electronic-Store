@@ -105,7 +105,7 @@ public class EditProductActivity extends AppCompatActivity {
         });
 
         priceEdit.addTextChangedListener(new TextWatcher() {
-            private boolean isEditing = false;
+            private final boolean isEditing = false;
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}

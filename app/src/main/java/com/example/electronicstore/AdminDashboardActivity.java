@@ -37,7 +37,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         logoutButton.setOnClickListener(v -> {
             auth.signOut();
             Toast.makeText(AdminDashboardActivity.this, "Logged out!", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(AdminDashboardActivity.this, LoginActivity.class));
+            startActivity(new Intent(AdminDashboardActivity.this, MainActivity.class));
             finish();
         });
 
