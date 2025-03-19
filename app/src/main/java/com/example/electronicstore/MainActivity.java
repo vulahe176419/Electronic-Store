@@ -25,8 +25,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -98,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         searchView = findViewById(R.id.searchView);
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
@@ -121,6 +122,8 @@ public class MainActivity extends AppCompatActivity {
                     Product product = snapshot.getValue(Product.class);
                     if (product != null) {
                         product.setPid(snapshot.getKey());
+                        String formattedPrice = formatPrice(product.getPrice());
+                        product.setFormattedPrice(formattedPrice);
                         productList.add(product);
                     }
                 }
@@ -166,6 +169,8 @@ public class MainActivity extends AppCompatActivity {
                         String productName = product.getName().toLowerCase();
                         if (productName.contains(searchKeyword)) {
                             product.setPid(snapshot.getKey());
+                            String formattedPrice = formatPrice(product.getPrice());
+                            product.setFormattedPrice(formattedPrice);
                             productList.add(product);
                         }
                     }
@@ -178,6 +183,11 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Search failed", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private String formatPrice(int price) {
+        NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
+        return formatter.format(price);
     }
     private void fetchProductsFromFirebase() {
         databaseReference.addValueEventListener(new ValueEventListener() {

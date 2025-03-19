@@ -12,7 +12,10 @@ import com.example.electronicstore.R;
 import com.example.electronicstore.model.Product;
 import com.example.electronicstore.ProductManagerActivity;
 import com.squareup.picasso.Picasso;
+
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
     private List<Product> products;
@@ -41,11 +44,21 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = products.get(position);
-        holder.productName.setText(product.getName());
 
-        String priceString = product.getPrice();
-        holder.productPrice.setText(priceString);
-        Picasso.get().load(product.getImageUrl()).into(holder.productImage);
+        holder.productName.setText(product.getName() != null ? product.getName() : "N/A");
+        holder.productPrice.setText(formatPrice(product.getPrice()));
+
+        if (product.getImageUrl() != null && !product.getImageUrl().isEmpty()) {
+            Picasso.get().load(product.getImageUrl()).into(holder.productImage);
+        }
+
+        if (product.isAvailable()) {
+            holder.productAvailability.setText("Available");
+            holder.productAvailability.setTextColor(holder.itemView.getContext().getResources().getColor(R.color.green));
+        } else {
+            holder.productAvailability.setText("Out of Stock");
+            holder.productAvailability.setTextColor(holder.itemView.getContext().getResources().getColor(R.color.red));
+        }
 
         holder.editButton.setOnClickListener(v -> {
             if (listener != null) {
@@ -56,18 +69,17 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     @Override
     public int getItemCount() {
-        return products.size();
+        return products != null ? products.size() : 0;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
-        notifyDataSetChanged();
+    public void setProducts(List<Product> newProducts) {
+        this.products = newProducts;
+        notifyItemRangeChanged(0, newProducts.size());
     }
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
         ImageView productImage;
-        TextView productName;
-        TextView productPrice;
+        TextView productName, productPrice, productAvailability;
         Button editButton;
 
         public ProductViewHolder(@NonNull View itemView) {
@@ -75,7 +87,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             productImage = itemView.findViewById(R.id.productImage);
             productName = itemView.findViewById(R.id.productName);
             productPrice = itemView.findViewById(R.id.productPrice);
+            productAvailability = itemView.findViewById(R.id.productAvailability);
             editButton = itemView.findViewById(R.id.edit_button);
         }
+    }
+
+    private String formatPrice(int price) {
+        NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
+        return formatter.format(price);
     }
 }
