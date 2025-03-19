@@ -11,8 +11,10 @@ import com.example.electronicstore.adapter.MainProductAdapter;
 import com.example.electronicstore.model.Product;
 import com.google.firebase.database.*;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class FilteredProductActivity extends AppCompatActivity {
 
@@ -36,7 +38,7 @@ public class FilteredProductActivity extends AppCompatActivity {
         categoryName = getIntent().getStringExtra("categoryName");
 
         if (categoryName != null) {
-            categoryTitle.setText("All product of " + categoryName);
+            categoryTitle.setText("All products of " + categoryName);
         }
 
         productList = new ArrayList<>();
@@ -62,6 +64,7 @@ public class FilteredProductActivity extends AppCompatActivity {
                         for (DataSnapshot data : snapshot.getChildren()) {
                             Product product = data.getValue(Product.class);
                             if (product != null) {
+                                product.setFormattedPrice(formatPrice(product.getPrice()));
                                 productList.add(product);
                             }
                         }
@@ -73,5 +76,10 @@ public class FilteredProductActivity extends AppCompatActivity {
                         Toast.makeText(FilteredProductActivity.this, "Failed to load products", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private String formatPrice(int price) {
+        NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
+        return formatter.format(price) + " VND";
     }
 }

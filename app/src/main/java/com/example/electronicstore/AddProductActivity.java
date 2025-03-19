@@ -93,7 +93,6 @@ public class AddProductActivity extends AppCompatActivity {
         String priceStr = priceEditText.getText().toString().trim();
         String imageUrl = imageUrlEditText.getText().toString().trim();
 
-        // Validation
         if (TextUtils.isEmpty(name)) {
             nameEditText.setError("Name is required");
             return;
@@ -107,10 +106,10 @@ public class AddProductActivity extends AppCompatActivity {
             return;
         }
 
-        String price = priceStr;
+        int price = Integer.parseInt(priceStr);
 
         DatabaseReference newProductRef = databaseReference.push();
-        String pid = newProductRef.getKey();  // e.g., "-Mabcdef123456"
+        String pid = newProductRef.getKey();
 
         Product newProduct = new Product(pid, name, detail, price, imageUrl, true, selectedCategoryId);
 
@@ -118,7 +117,7 @@ public class AddProductActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(this, "Product added successfully.", Toast.LENGTH_LONG).show();
-                        finish(); // Close AddProductActivity
+                        finish();
                     } else {
                         Toast.makeText(this, "Failed to add product: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }

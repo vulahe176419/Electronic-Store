@@ -4,15 +4,16 @@ public class Product {
     String pid;
     private String name;
     private String detail;
-    private String price;
+    private int price;
     private String imageUrl;
     private boolean available;
     private String categoryId;
+    private String formattedPrice;
 
     public Product() {
     }
 
-    public Product(String pid, String name, String detail, String price, String imageUrl, boolean available, String categoryId) {
+    public Product(String pid, String name, String detail, int price, String imageUrl, boolean available, String categoryId) {
         this.pid = pid;
         this.name = name;
         this.detail = detail;
@@ -42,10 +43,10 @@ public class Product {
     public void setDetail(String detail) {
         this.detail = detail;
     }
-    public String getPrice() {
+    public int getPrice() {
         return price;
     }
-    public void setPrice(String price) {
+    public void setPrice(int price) {
         this.price = price;
     }
     public String getImageUrl() {
@@ -67,5 +68,13 @@ public class Product {
 
     public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public String getFormattedPrice() {
+        return formattedPrice;
+    }
+
+    public void setFormattedPrice(String formattedPrice) {
+        this.formattedPrice = formattedPrice;
     }
 }

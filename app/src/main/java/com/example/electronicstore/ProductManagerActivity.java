@@ -69,15 +69,15 @@ public class ProductManagerActivity extends AppCompatActivity {
         });
     }
 
-    private void fetchProducts() {  // Fixed method name
+    private void fetchProducts() {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 productList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Product product = dataSnapshot.getValue(Product.class);  // Fixed case
+                    Product product = dataSnapshot.getValue(Product.class);
                     if (product != null) {
-                        product.setPid(dataSnapshot.getKey());  // Use setPid instead of setUid
+                        product.setPid(dataSnapshot.getKey());
                         productList.add(product);
                     }
                 }

@@ -9,7 +9,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
-import com.example.electronicstore.model.Product;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
@@ -36,12 +37,12 @@ public class ProductDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent != null) {
             String name = intent.getStringExtra("name");
-            String price = intent.getStringExtra("price");
+            int price = intent.getIntExtra("price", 0);
             String description = intent.getStringExtra("description");
             String imageUrl = intent.getStringExtra("imageUrl");
 
             productName.setText(name);
-            productPrice.setText(price);
+            productPrice.setText(formatPrice(price));
             productDescription.setText(description);
             Glide.with(this).load(imageUrl).into(productImage);
         }
@@ -50,5 +51,10 @@ public class ProductDetailActivity extends AppCompatActivity {
             Toast.makeText(this, "Add product to cart successfully!", Toast.LENGTH_LONG).show();
             startActivity(new Intent(ProductDetailActivity.this, CartActivity.class));
         });
+    }
+
+    private String formatPrice(int price) {
+        NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
+        return formatter.format(price);
     }
 }

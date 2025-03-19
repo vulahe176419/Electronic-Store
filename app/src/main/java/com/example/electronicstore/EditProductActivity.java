@@ -78,7 +78,7 @@ public class EditProductActivity extends AppCompatActivity {
                     if (product != null) {
                         nameEdit.setText(product.getName());
                         detailEdit.setText(product.getDetail());
-                        priceEdit.setText(product.getPrice());
+                        priceEdit.setText(String.valueOf(product.getPrice()));
                         imageUrlEdit.setText(product.getImageUrl());
                         if (snapshot.hasChild("available")) {
                             availableCheckBox.setChecked(product.isAvailable());
@@ -115,17 +115,6 @@ public class EditProductActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (isEditing) {
-                    return;
-                }
-                isEditing = true;
-                String originalString = s.toString().replaceAll("\\.", "");
-                if (!originalString.isEmpty()) {
-                    String formattedString = formatPrice(originalString);
-                    priceEdit.setText(formattedString);
-                    priceEdit.setSelection(formattedString.length());
-                }
-                isEditing = false;
             }
         });
 
@@ -151,7 +140,7 @@ public class EditProductActivity extends AppCompatActivity {
             imageUrlEdit.setError("Image URL cannot be empty");
             return;
         }
-        String newPrice = newPriceStr;
+        int newPrice = Integer.parseInt(newPriceStr);
         int selectedCategoryIndex = categorySpinner.getSelectedItemPosition();
         String selectedCategoryId = categoryList.get(selectedCategoryIndex).getId();
 
@@ -221,16 +210,4 @@ public class EditProductActivity extends AppCompatActivity {
         });
     }
 
-    private String formatPrice(String price) {
-        StringBuilder formatted = new StringBuilder();
-        int count = 0;
-        for (int i = price.length() - 1; i >= 0; i--) {
-            formatted.append(price.charAt(i));
-            count++;
-            if (count % 3 == 0 && i != 0) {
-                formatted.append('.');
-            }
-        }
-        return formatted.reverse().toString();
-    }
 }
