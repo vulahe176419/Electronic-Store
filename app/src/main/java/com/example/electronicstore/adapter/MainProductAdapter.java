@@ -49,6 +49,7 @@ public class MainProductAdapter extends RecyclerView.Adapter<MainProductAdapter.
             intent.putExtra("price", + product.getPrice());
             intent.putExtra("description", product.getDetail());
             intent.putExtra("imageUrl", product.getImageUrl());
+            intent.putExtra("isAvailable", product.isAvailable());
             context.startActivity(intent);
         });
     }
