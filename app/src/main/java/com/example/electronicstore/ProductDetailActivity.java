@@ -8,6 +8,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
+import com.example.electronicstore.model.Cart;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.text.NumberFormat;
 import java.util.Locale;
 
@@ -16,11 +22,17 @@ public class ProductDetailActivity extends AppCompatActivity {
     private ImageView productImage;
     private TextView productName, productPrice, productDescription, productAvailability, backText;
     private Button addToCartButton;
+    private FirebaseAuth auth;
+    private DatabaseReference databaseReference;
+    private String productId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
+
+        auth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference("carts");
 
         productImage = findViewById(R.id.productImage);
         productName = findViewById(R.id.productName);
@@ -40,6 +52,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             int price = intent.getIntExtra("price", 0);
             String description = intent.getStringExtra("description");
             String imageUrl = intent.getStringExtra("imageUrl");
+            productId = intent.getStringExtra("productId");
 
             boolean isAvailable = true;
             if (intent.hasExtra("isAvailable")) {
@@ -62,13 +75,49 @@ public class ProductDetailActivity extends AppCompatActivity {
                 addToCartButton.setEnabled(false);
                 addToCartButton.setBackgroundColor(getResources().getColor(R.color.gray));
             }
+
+            addToCartButton.setOnClickListener(view -> {
+                addProductToCart(productId, name, price, imageUrl);
+            });
         }
 
+    }
 
-        addToCartButton.setOnClickListener(view -> {
-            Toast.makeText(this, "Add product to cart successfully!", Toast.LENGTH_LONG).show();
-            startActivity(new Intent(ProductDetailActivity.this, CartActivity.class));
-        });
+    private void addProductToCart(String productId, String productName, int price, String imageUrl) {
+        FirebaseUser user = auth.getCurrentUser();
+        if (user == null) {
+            Toast.makeText(this, "Please log in to add to cart!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String userId = user.getUid(); // Lấy userId từ FirebaseAuth
+        String cartId = databaseReference.push().getKey(); // Tạo ID duy nhất
+        if (cartId == null) {
+            Toast.makeText(this, "Failed to generate cart ID!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Cart cart = new Cart(
+                cartId,
+                cartId.hashCode(),
+                imageUrl,
+                (double) price,
+                productId,
+                productName,
+                1,
+                userId
+        );
+
+        // Ghi dữ liệu vào Firebase
+        databaseReference.child(cartId).setValue(cart)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(this, "Product added to cart successfully!", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(ProductDetailActivity.this, CartActivity.class);
+                    startActivity(intent);
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failed to add to cart: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
     }
 
     private String formatPrice(int price) {

@@ -12,11 +12,11 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/white"
         android:elevation="4dp"
-        app:navigationIcon="@drawable/icon_cart"
-        android:titleTextColor="#000000"
-        xmlns:app="http://schemas.android.com/apk/res-auto" />
+        app:navigationIcon="@drawable/ic_back"
+        android:title="Shopping Cart"
+        android:titleTextColor="#000000" />
 
-    <!-- RecyclerView-->
+    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cartRecyclerView"
         android:layout_width="match_parent"
@@ -40,14 +40,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Subtotal"
                 android:textSize="16sp"/>
-
             <TextView
                 android:id="@+id/subtotalText"
                 android:layout_width="wrap_content"
@@ -62,14 +60,12 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="8dp">
-
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Shipping"
                 android:textSize="16sp"/>
-
             <TextView
                 android:id="@+id/shippingText"
                 android:layout_width="wrap_content"
@@ -84,7 +80,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="8dp">
-
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -92,7 +87,6 @@
                 android:text="Total"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
-
             <TextView
                 android:id="@+id/totalText"
                 android:layout_width="wrap_content"
@@ -113,6 +107,7 @@
             android:backgroundTint="#FF6200EE"
             android:textColor="@color/white"/>
     </LinearLayout>
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
@@ -123,5 +118,4 @@
         app:itemIconTint="@layout/bottom_nav_color"
         app:itemTextColor="@layout/bottom_nav_color"
         app:layout_constraintBottom_toBottomOf="parent" />
-
 </RelativeLayout>

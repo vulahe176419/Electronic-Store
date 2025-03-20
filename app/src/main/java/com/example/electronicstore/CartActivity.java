@@ -15,6 +15,7 @@ import com.example.electronicstore.adapter.CartAdapter;
 import com.example.electronicstore.model.Cart;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,15 +33,31 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnCar
     private TextView subtotalText, totalText;
     private DatabaseReference databaseReference;
     private double subtotal = 0.0;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cart);
 
+        auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+        if (user == null) {
+            Toast.makeText(this, "Please log in to view your cart!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(CartActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setTitle("Shopping Cart");
+
+        toolbar.setNavigationOnClickListener(v -> {
+            Intent intent = new Intent(CartActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        });
 
         RecyclerView recyclerView = findViewById(R.id.cartRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -53,7 +70,7 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnCar
         totalText = findViewById(R.id.totalText);
 
         databaseReference = FirebaseDatabase.getInstance().getReference("carts");
-        loadProductsFromRealtimeDatabase();
+        loadProductsFromRealtimeDatabase(user.getUid());
 
         Button checkoutButton = findViewById(R.id.checkoutButton);
         checkoutButton.setOnClickListener(v -> {
@@ -63,49 +80,52 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnCar
         });
     }
 
-    private void loadProductsFromRealtimeDatabase() {
+    private void loadProductsFromRealtimeDatabase(String userId) {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 carts.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String id = snapshot.getKey(); // Lấy ID của document
+                    String id = snapshot.getKey();
 
-                    Integer cartId = snapshot.child("CartId").getValue(Integer.class);
-                    if (cartId == null) cartId = 0;
+                    String cartUserId = snapshot.child("userId").getValue(String.class);
+                    if (cartUserId != null && cartUserId.equals(userId)) { // Lọc theo userId
+                        Integer cartId = snapshot.child("cartId").getValue(Integer.class);
+                        if (cartId == null) cartId = 0;
 
-                    Integer productId = snapshot.child("ProductId").getValue(Integer.class);
-                    if (productId == null) productId = 0;
+                        String productId = snapshot.child("productId").getValue(String.class);
+                        if (productId == null) productId = "";
 
-                    String productName = snapshot.child("ProductName").getValue(String.class);
-                    if (productName == null) productName = "";
+                        String productName = snapshot.child("productName").getValue(String.class);
+                        if (productName == null) productName = "";
 
-                    Double price = snapshot.child("Price").getValue(Double.class);
-                    if (price == null) price = 0.0;
+                        Double price = snapshot.child("price").getValue(Double.class);
+                        if (price == null) price = 0.0;
 
-                    Integer quantity = snapshot.child("Quantity").getValue(Integer.class);
-                    if (quantity == null) quantity = 0;
+                        Integer quantity = snapshot.child("quantity").getValue(Integer.class);
+                        if (quantity == null) quantity = 0;
 
-                    String imageUrl = snapshot.child("Image").getValue(String.class);
-                    if (imageUrl == null) imageUrl = "";
+                        String imageUrl = snapshot.child("image").getValue(String.class);
+                        if (imageUrl == null) imageUrl = "";
 
-                    Integer userId = snapshot.child("UserId").getValue(Integer.class);
-                    if (userId == null) userId = 0;
-
-                    Cart item = new Cart(
-                            id,
-                            cartId,
-                            imageUrl,
-                            price,
-                            productId,
-                            productName,
-                            quantity,
-                            userId
-                    );
-                    carts.add(item);
+                        Cart item = new Cart(
+                                id,
+                                cartId,
+                                imageUrl,
+                                price,
+                                productId,
+                                productName,
+                                quantity,
+                                cartUserId
+                        );
+                        carts.add(item);
+                    }
                 }
                 adapter.notifyDataSetChanged();
                 updateTotal();
+                if (carts.isEmpty()) {
+                    Toast.makeText(CartActivity.this, "Your cart is empty!", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -129,7 +149,7 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnCar
 
     @Override
     public void onQuantityChanged(Cart item) {
-        databaseReference.child(item.getId()).child("Quantity").setValue(item.getQuantity())
+        databaseReference.child(item.getId()).child("quantity").setValue(item.getQuantity())
                 .addOnSuccessListener(aVoid -> updateTotal())
                 .addOnFailureListener(e -> Toast.makeText(this, "Cập nhật lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
