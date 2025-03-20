@@ -76,6 +76,7 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnCar
         checkoutButton.setOnClickListener(v -> {
             Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
             intent.putExtra("subtotal", subtotal);
+            intent.putParcelableArrayListExtra("carts", new ArrayList<>(carts));
             startActivity(intent);
         });
     }
