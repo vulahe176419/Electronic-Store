@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:background="#F5F5F5">
+
+    <!-- Tên cửa hàng (đã bị xóa theo yêu cầu trước đó, nên bỏ qua) -->
+
+    <!-- Container sản phẩm -->
+    <LinearLayout
+        android:id="@+id/productContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Hình ảnh sản phẩm -->
+        <ImageView
+            android:id="@+id/productImage"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:scaleType="centerCrop"/>
+
+        <!-- Thông tin sản phẩm -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingStart="8dp">
+
+            <TextView
+                android:id="@+id/productName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sản phẩm"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/originalPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₫0"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/totalItems"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tổng sản phẩm: 0"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/totalPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tổng số tiền: ₫0"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/deliveryStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Trạng thái"
+                android:textSize="12sp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Container nút hành động -->
+    <LinearLayout
+        android:id="@+id/buttonContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        app:layout_constraintTop_toBottomOf="@id/productContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Button
+            android:id="@+id/returnButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trả hàng/Hoàn tiền"
+            android:textColor="#FFFFFF"
+            android:background="#CCCCCC"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/reviewButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đánh giá"
+            android:textColor="#FFFFFF"
+            android:background="#FF0000"
+            android:visibility="gone"/>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

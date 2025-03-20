@@ -63,8 +63,11 @@
         <activity
             android:name=".ManageAddress"
             android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".OrderManagementActivity"-->
+<!--            android:exported="true"/>-->
         <activity
-            android:name=".MainActivity"
+            android:name=".OrderManagementActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -103,6 +106,9 @@
         <activity
             android:name=".RateProduct"
             android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".MainActivity"-->
+<!--            android:exported="false" />-->
     </application>
 
 </manifest>

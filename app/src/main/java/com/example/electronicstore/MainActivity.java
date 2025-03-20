@@ -64,9 +64,9 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             } else if (itemId == R.id.nav_profile) {
                 if (auth.getCurrentUser() != null) {
-                    startActivity(new Intent(MainActivity.this, PersonalActivity.class));
-                } else {
                     startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                } else {
+                    startActivity(new Intent(MainActivity.this, PersonalActivity.class));
                 }
                 return true;
             } else {
