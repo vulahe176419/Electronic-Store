@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,7 +35,7 @@ public class EditProductActivity extends AppCompatActivity {
     private Button saveButton, deleteButton;
     private DatabaseReference productRef;
     private String targetPid;
-    private TextView backText;
+    private ImageView backText;
     private Spinner categorySpinner;
     private DatabaseReference categoryRef;
     private String selectedCategoryId;

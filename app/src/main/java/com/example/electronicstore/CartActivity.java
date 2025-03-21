@@ -124,9 +124,6 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnCar
                 }
                 adapter.notifyDataSetChanged();
                 updateTotal();
-                if (carts.isEmpty()) {
-                    Toast.makeText(CartActivity.this, "Your cart is empty!", Toast.LENGTH_SHORT).show();
-                }
             }
 
             @Override

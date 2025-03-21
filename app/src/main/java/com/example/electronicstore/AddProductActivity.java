@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +30,7 @@ public class AddProductActivity extends AppCompatActivity {
     private EditText nameEditText, detailEditText, priceEditText, imageUrlEditText;
     private Button submitButton;
     private DatabaseReference databaseReference;
-    private TextView backText;
+    private ImageView backText;
     private Spinner categorySpinner;
     private final List<String> categoryNames = new ArrayList<>();
     private final List<String> categoryIds = new ArrayList<>();
@@ -106,7 +107,14 @@ public class AddProductActivity extends AppCompatActivity {
             return;
         }
 
-        int price = Integer.parseInt(priceStr);
+        priceStr = priceStr.replace(".", "");
+        int price;
+        try {
+            price = Integer.parseInt(priceStr);
+        } catch (NumberFormatException e) {
+            priceEditText.setError("Invalid price format");
+            return;
+        }
 
         DatabaseReference newProductRef = databaseReference.push();
         String pid = newProductRef.getKey();

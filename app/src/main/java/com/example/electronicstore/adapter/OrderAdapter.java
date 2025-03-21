@@ -23,10 +23,10 @@ import java.util.Map;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
 
-    private Context context;
-    private List<Order> orderList;
-    private Map<String, Product> productMap;
-    private Map<String, Integer> totalItemsMap; // Thêm map để lưu tổng số sản phẩm
+    private final Context context;
+    private final List<Order> orderList;
+    private final Map<String, Product> productMap;
+    private final Map<String, Integer> totalItemsMap; // Thêm map để lưu tổng số sản phẩm
     private String currentFilter;
 
     public OrderAdapter(Context context, List<Order> orderList, Map<String, Product> productMap, Map<String, Integer> totalItemsMap, String currentFilter) {
