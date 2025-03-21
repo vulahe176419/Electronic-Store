@@ -20,7 +20,9 @@ import java.util.Locale;
 public class ProductDetailActivity extends AppCompatActivity {
 
     private ImageView productImage;
-    private TextView productName, productPrice, productDescription, productAvailability, backText;
+    private TextView productName, productPrice, productDescription, productAvailability;
+    private ImageView backText;
+
     private Button addToCartButton;
     private FirebaseAuth auth;
     private DatabaseReference databaseReference;
@@ -87,11 +89,12 @@ public class ProductDetailActivity extends AppCompatActivity {
         FirebaseUser user = auth.getCurrentUser();
         if (user == null) {
             Toast.makeText(this, "Please log in to add to cart!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(ProductDetailActivity.this, LoginActivity.class));
             return;
         }
 
-        String userId = user.getUid(); // Lấy userId từ FirebaseAuth
-        String cartId = databaseReference.push().getKey(); // Tạo ID duy nhất
+        String userId = user.getUid();
+        String cartId = databaseReference.push().getKey();
         if (cartId == null) {
             Toast.makeText(this, "Failed to generate cart ID!", Toast.LENGTH_SHORT).show();
             return;
@@ -101,14 +104,13 @@ public class ProductDetailActivity extends AppCompatActivity {
                 cartId,
                 cartId.hashCode(),
                 imageUrl,
-                (double) price,
+                price,
                 productId,
                 productName,
                 1,
                 userId
         );
 
-        // Ghi dữ liệu vào Firebase
         databaseReference.child(cartId).setValue(cart)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Product added to cart successfully!", Toast.LENGTH_LONG).show();

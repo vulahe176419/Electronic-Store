@@ -1,10 +1,12 @@
 package com.example.electronicstore;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -18,6 +20,7 @@ public class AddCategoryActivity extends AppCompatActivity {
     private Button addCategoryButton;
     private ProgressBar progressBar;
     private DatabaseReference categoryRef;
+    private ImageView backText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,10 +30,15 @@ public class AddCategoryActivity extends AppCompatActivity {
         categoryNameEditText = findViewById(R.id.category_name_edit);
         addCategoryButton = findViewById(R.id.add_category_button);
         progressBar = findViewById(R.id.progress_bar);
+        backText = findViewById(R.id.btn_back);
 
         categoryRef = FirebaseDatabase.getInstance().getReference("categories");
 
         addCategoryButton.setOnClickListener(v -> addCategory());
+
+        backText.setOnClickListener(v -> {
+            startActivity(new Intent(AddCategoryActivity.this, ProductManagerActivity.class));
+        });
     }
 
     private void addCategory() {

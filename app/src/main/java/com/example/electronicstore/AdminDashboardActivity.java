@@ -7,12 +7,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 public class AdminDashboardActivity extends AppCompatActivity {
     private FirebaseAuth auth;
-    private TextView userManagerText, productManagerText;
+    private CardView userManagerText, productManagerText;
     private Button logoutButton;
 
     @Override
@@ -24,7 +25,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
         userManagerText = findViewById(R.id.user_manager);
         productManagerText= findViewById(R.id.product_manager);
-        logoutButton = findViewById(R.id.btn_logoutt);
+        logoutButton = findViewById(R.id.btn_logout);
 
         userManagerText.setOnClickListener(v -> {
             startActivity(new Intent(AdminDashboardActivity.this, UserManagerActivity.class));

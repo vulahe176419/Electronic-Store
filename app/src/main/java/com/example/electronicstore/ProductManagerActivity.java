@@ -3,6 +3,7 @@ package com.example.electronicstore;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -26,7 +27,7 @@ public class ProductManagerActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private ProductAdapter productAdapter;
     private List<Product> productList;
-    private TextView backText;
+    private ImageView backText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

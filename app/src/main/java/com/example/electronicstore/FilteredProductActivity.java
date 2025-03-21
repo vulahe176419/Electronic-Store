@@ -1,6 +1,8 @@
 package com.example.electronicstore;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -9,6 +11,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.electronicstore.adapter.MainProductAdapter;
 import com.example.electronicstore.model.Product;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.*;
 
 import java.text.NumberFormat;
@@ -24,6 +28,8 @@ public class FilteredProductActivity extends AppCompatActivity {
     private DatabaseReference productsRef;
     private String categoryId, categoryName;
     private TextView categoryTitle;
+    private BottomNavigationView bottomNavigationView;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,18 +39,15 @@ public class FilteredProductActivity extends AppCompatActivity {
         categoryTitle = findViewById(R.id.categoryTitle);
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-
         categoryId = getIntent().getStringExtra("categoryId");
         categoryName = getIntent().getStringExtra("categoryName");
 
         if (categoryName != null) {
             categoryTitle.setText("All products of " + categoryName);
         }
-
         productList = new ArrayList<>();
         productAdapter = new MainProductAdapter(productList, this);
         recyclerView.setAdapter(productAdapter);
-
         productsRef = FirebaseDatabase.getInstance().getReference("products");
 
         if (categoryId != null) {
@@ -53,6 +56,35 @@ public class FilteredProductActivity extends AppCompatActivity {
             Toast.makeText(this, "Invalid category", Toast.LENGTH_SHORT).show();
             finish();
         }
+
+        auth = FirebaseAuth.getInstance();
+        bottomNavigationView = findViewById(R.id.bottomNav);
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.nav_home) {
+                startActivity(new Intent(FilteredProductActivity.this, MainActivity.class));
+                return true;
+            } else if (itemId == R.id.nav_category) {
+                startActivity(new Intent(FilteredProductActivity.this, CategoryFilterActivity.class));
+                return true;
+            } else if (itemId == R.id.nav_cart) {
+                if (auth.getCurrentUser() != null) {
+                    startActivity(new Intent(FilteredProductActivity.this, CartActivity.class));
+                } else {
+                    startActivity(new Intent(FilteredProductActivity.this, LoginActivity.class));
+                }
+                return true;
+            } else if (itemId == R.id.nav_profile) {
+                if (auth.getCurrentUser() != null) {
+                    startActivity(new Intent(FilteredProductActivity.this, SettingsActivity.class));
+                } else {
+                    startActivity(new Intent(FilteredProductActivity.this, PersonalActivity.class));
+                }
+                return true;
+            } else {
+                return false;
+            }
+        });
     }
 
     private void loadProductsByCategory() {

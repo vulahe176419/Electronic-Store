@@ -35,9 +35,9 @@ public class OrderFragment extends Fragment {
     private RecyclerView recyclerView;
     private ProgressBar loadingProgressBar;
     private OrderAdapter adapter;
-    private List<Order> orderList = new ArrayList<>();
-    private Map<String, Product> productMap = new HashMap<>();
-    private Map<String, Integer> totalItemsMap = new HashMap<>(); // Thêm map để lưu tổng số sản phẩm
+    private final List<Order> orderList = new ArrayList<>();
+    private final Map<String, Product> productMap = new HashMap<>();
+    private final Map<String, Integer> totalItemsMap = new HashMap<>(); // Thêm map để lưu tổng số sản phẩm
     private DatabaseReference databaseReference;
     private FirebaseAuth auth;
 
