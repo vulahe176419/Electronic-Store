@@ -7,32 +7,53 @@
     android:layout_margin="8dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp"
-    android:padding="8dp">
+    android:padding="12dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
-        
+        android:orientation="vertical"
+        android:padding="8dp">
+
         <TextView
             android:id="@+id/user_name"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="User Name"
             android:textStyle="bold"
             android:textSize="16sp"
-            android:textColor="?attr/colorOnSurface" />
+            android:textColor="?attr/colorOnSurface"
+            android:paddingBottom="4dp"/>
 
         <TextView
             android:id="@+id/user_email"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
             android:text="user@example.com"
             android:textSize="14sp"
-            android:textColor="?attr/colorSecondary" />
+            android:textColor="?attr/colorSecondary"
+            android:paddingBottom="4dp"/>
+
+        <TextView
+            android:id="@+id/user_role"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Role"
+            android:textStyle="italic"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:paddingBottom="4dp"/>
+
+        <TextView
+            android:id="@+id/your_account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="(Your account)"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="@color/light_blue"
+            android:visibility="gone"
+            android:paddingBottom="4dp"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/edit_button"
@@ -41,7 +62,8 @@
             style="@style/CustomButton"
             android:text="Edit"
             android:textAllCaps="false"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:layout_gravity="end"/>
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

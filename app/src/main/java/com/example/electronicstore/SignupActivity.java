@@ -62,7 +62,7 @@ public class SignupActivity extends AppCompatActivity {
         }
 
         if (email.contains("@") && email.substring(email.indexOf("@")).contains("admin")) {
-            Toast.makeText(this, "Can't create account with '@admin'!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "'@admin' for admin account. Can't create!", Toast.LENGTH_SHORT).show();
             return;
         }
 

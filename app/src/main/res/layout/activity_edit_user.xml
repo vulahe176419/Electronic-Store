@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@color/white">
 
     <ImageView
         android:id="@+id/btn_back"
@@ -59,6 +60,13 @@
         android:textColor="@color/black"
         android:inputType="textEmailAddress"
         android:hint="Enter new email" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="*@admin.com for admin account"
+        android:textColor="@color/red"
+        android:textStyle="italic" />
 
     <TextView
         android:layout_width="wrap_content"

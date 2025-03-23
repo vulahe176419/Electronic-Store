@@ -97,6 +97,6 @@
         android:textStyle="bold"
         android:padding="12dp"
         android:textColor="@color/white"
-        android:backgroundTint="@color/light_blue"
+        android:backgroundTint="@color/red"
         android:layout_marginTop="12dp"/>
 </LinearLayout>
