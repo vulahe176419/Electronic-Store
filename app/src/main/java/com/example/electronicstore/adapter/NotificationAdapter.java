@@ -37,10 +37,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         holder.tvTime.setText(notification.getTime());
         holder.imgNotification.setImageResource(R.drawable.ic_notification);
 
-        // Đánh dấu đã đọc khi click
         holder.itemView.setOnClickListener(v -> markAsRead(notification));
 
-        // Xóa khi nhấn giữ
         holder.itemView.setOnLongClickListener(v -> {
             deleteNotification(notification);
             return true;

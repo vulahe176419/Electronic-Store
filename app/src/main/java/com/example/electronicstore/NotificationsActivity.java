@@ -14,6 +14,7 @@ import com.example.electronicstore.adapter.NotificationAdapter;
 import com.example.electronicstore.model.Notification;
 import com.google.firebase.database.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class NotificationsActivity extends AppCompatActivity {
@@ -56,6 +57,9 @@ public class NotificationsActivity extends AppCompatActivity {
                         notificationList.add(notification);
                     }
                 }
+
+                // Reverse the list to show newest first (top to bottom)
+                Collections.reverse(notificationList);
 
                 if (notificationList.isEmpty()) {
                     recyclerView.setVisibility(View.GONE);

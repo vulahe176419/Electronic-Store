@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.electronicstore.utils.NotificationUtils; // Import the new class
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -44,11 +45,15 @@ public class EditProfileActivity extends AppCompatActivity {
             String userId = currentUser.getUid();
             databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId);
             getUserData();
+        } else {
+            Toast.makeText(this, "User not authenticated", Toast.LENGTH_SHORT).show();
+            finish();
         }
 
         btnSave.setOnClickListener(v -> updateUserData());
         ivBack.setOnClickListener(v -> {
             startActivity(new Intent(EditProfileActivity.this, SettingsActivity.class));
+            finish();
         });
     }
 
@@ -90,16 +95,42 @@ public class EditProfileActivity extends AppCompatActivity {
             return;
         }
 
+        if (!newEmail.equals(currentUser.getEmail())) {
+            currentUser.updateEmail(newEmail).addOnCompleteListener(emailTask -> {
+                if (!emailTask.isSuccessful()) {
+                    Toast.makeText(EditProfileActivity.this, "Email update failed: " + emailTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                updateDatabase(newName, newEmail, newPassword);
+            });
+        } else {
+            updateDatabase(newName, newEmail, newPassword);
+        }
+
+//        if (!newPassword.isEmpty()) {
+//            currentUser.updatePassword(newPassword).addOnCompleteListener(passwordTask -> {
+//                if (!passwordTask.isSuccessful()) {
+//                    Toast.makeText(EditProfileActivity.this, "Password update failed: " + passwordTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                }
+//            });
+//        }
+    }
+
+    private void updateDatabase(String newName, String newEmail, String newPassword) {
         databaseReference.child("name").setValue(newName);
         databaseReference.child("email").setValue(newEmail);
         databaseReference.child("password").setValue(newPassword)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(EditProfileActivity.this, "Update success", Toast.LENGTH_SHORT).show();
+
+                        String userId = currentUser.getUid();
+                        NotificationUtils.createProfileUpdateNotification(userId);
+
                         startActivity(new Intent(EditProfileActivity.this, SettingsActivity.class));
                         finish();
                     } else {
-                        Toast.makeText(EditProfileActivity.this, "Update failed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditProfileActivity.this, "Update failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
