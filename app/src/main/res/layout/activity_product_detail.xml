@@ -84,7 +84,19 @@
                 android:textColor="@android:color/black"
                 android:textSize="16sp" />
 
+            <!-- Review -->
+            <Button
+                android:id="@+id/btnReview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:backgroundTint="#1599d6"
+                android:text="View Reviews Product"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"/>
+
         </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
 
     <!-- Nút Add to Cart cố định ở dưới -->

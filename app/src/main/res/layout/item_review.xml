@@ -34,7 +34,7 @@
                 android:id="@+id/txtUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tên người dùng"
+                android:text="User Name"
                 android:textSize="16sp"/>
 
             <RatingBar
@@ -66,7 +66,7 @@
         android:id="@+id/txtVariant"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Phân loại: Không có"
+        android:text="Classify: Không có"
         android:textSize="14sp"
         android:layout_marginTop="4dp"/>
 
@@ -75,7 +75,7 @@
         android:id="@+id/txtComment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Bình luận..."
+        android:text="Comment..."
         android:textSize="16sp"
         android:layout_marginTop="4dp"
         android:contentDescription="Nội dung bình luận của người dùng"/>
@@ -120,8 +120,8 @@
             android:id="@+id/btnReply"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Trả lời"
-            android:background="@drawable/filter_button_background"
+            android:text="Reply"
+            android:backgroundTint="@color/light_blue"
             android:layout_marginTop="4dp"
             android:contentDescription="Nút trả lời đánh giá"/>
     </LinearLayout>

@@ -23,7 +23,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private TextView productName, productPrice, productDescription, productAvailability;
     private ImageView backText;
 
-    private Button addToCartButton;
+    private Button addToCartButton, btnReview;
     private FirebaseAuth auth;
     private DatabaseReference databaseReference;
     private String productId;
@@ -41,11 +41,18 @@ public class ProductDetailActivity extends AppCompatActivity {
         productPrice = findViewById(R.id.productPrice);
         productDescription = findViewById(R.id.productDescription);
         productAvailability = findViewById(R.id.productAvailability);
+        btnReview = findViewById(R.id.btnReview);
         addToCartButton = findViewById(R.id.addToCartButton);
         backText = findViewById(R.id.btn_back);
 
         backText.setOnClickListener(v -> {
             startActivity(new Intent(ProductDetailActivity.this, MainActivity.class));
+        });
+
+        btnReview.setOnClickListener(v -> {
+            Intent intent = new Intent(ProductDetailActivity.this, ProductReviewsActivity.class);
+            intent.putExtra("productId", productId); // Đảm bảo productId được truyền
+            startActivity(intent);
         });
 
         Intent intent = getIntent();

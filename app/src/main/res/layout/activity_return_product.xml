@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:text="Tên sản phẩm"
+                android:text="Name Product"
                 android:maxLines="2"
                 android:ellipsize="end"/>
 
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textColor="#666666"
-                android:text="Số lượng: 1"
+                android:text="Quantity: 1"
                 android:layout_marginTop="4dp"/>
         </LinearLayout>
     </LinearLayout>

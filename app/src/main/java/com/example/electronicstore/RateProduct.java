@@ -27,6 +27,7 @@ import com.cloudinary.android.callback.ErrorInfo;
 import com.cloudinary.android.callback.UploadCallback;
 import com.example.electronicstore.model.Review;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -61,7 +62,7 @@ public class RateProduct extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.rate_product);
+        setContentView(R.layout.rate_product); // Gắn layout cho activity
 
         // Khởi tạo Cloudinary
         initCloudinary();
@@ -92,14 +93,14 @@ public class RateProduct extends AppCompatActivity {
         mediaPreviewAdapter = new MediaPreviewAdapter(mediaList);
         recyclerViewMediaPreview.setAdapter(mediaPreviewAdapter);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference = FirebaseDatabase.getInstance().getReference(); // Khởi tạo tham chiếu Firebase
 
         // Khởi tạo ActivityResultLauncher để chọn hình ảnh
         pickImage = registerForActivityResult(new ActivityResultContracts.GetContent(),
                 uri -> {
                     if (uri != null) {
-                        mediaList.add(uri);
-                        mediaPreviewAdapter.notifyDataSetChanged();
+                        mediaList.add(uri); // Thêm URI ảnh vào danh sách
+                        mediaPreviewAdapter.notifyDataSetChanged(); // Cập nhật giao diện
                     }
                 });
 
@@ -107,38 +108,41 @@ public class RateProduct extends AppCompatActivity {
         pickVideo = registerForActivityResult(new ActivityResultContracts.GetContent(),
                 uri -> Toast.makeText(this, "Video upload is not supported", Toast.LENGTH_SHORT).show());
 
-        btnAddImage.setOnClickListener(v -> pickImage.launch("image/*"));
-        btnAddVideo.setOnClickListener(v -> pickVideo.launch("video/*"));
-        btnSubmit.setOnClickListener(v -> submitReview());
+        // Sự kiện nhấn các nút
+        btnAddImage.setOnClickListener(v -> pickImage.launch("image/*")); // Mở trình chọn ảnh
+        btnAddVideo.setOnClickListener(v -> pickVideo.launch("video/*")); // Mở trình chọn video
+        btnSubmit.setOnClickListener(v -> submitReview()); // Gửi đánh giá
 
         // Tải thông tin sản phẩm
         loadProductInfo();
     }
 
+    // Khởi tạo Cloudinary với thông tin cấu hình
     private void initCloudinary() {
-        // Cấu hình Cloudinary
         Map<String, String> config = new HashMap<>();
-        config.put("cloud_name", "duuzdzbwm"); // Thay bằng Cloud Name của bạn
-        config.put("api_key", "471421576273992");       // Thay bằng API Key của bạn
-        config.put("api_secret", "4wHu1ymjwA1HMXnV2RVWy3ADNzo"); // Thay bằng API Secret của bạn
-        MediaManager.init(this, config);
+        config.put("cloud_name", "duuzdzbwm");
+        config.put("api_key", "471421576273992");
+        config.put("api_secret", "4wHu1ymjwA1HMXnV2RVWy3ADNzo");
+        MediaManager.init(this, config); // Khởi tạo MediaManager
     }
 
+    // Tải thông tin sản phẩm từ Firebase
     private void loadProductInfo() {
         if (productId == null || orderId == null) {
             Toast.makeText(this, "No product information found", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Lấy thông tin sản phẩm từ node "products"
         databaseReference.child("products").child(productId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     String name = snapshot.child("name").getValue(String.class);
                     String imageUrl = snapshot.child("imageUrl").getValue(String.class);
-                    txtProductName.setText(name != null ? name : "Unknown");
+                    txtProductName.setText(name != null ? name : "Unknown"); // Hiển thị tên sản phẩm
                     if (imageUrl != null) {
-                        Glide.with(RateProduct.this).load(imageUrl).into(imgProduct);
+                        Glide.with(RateProduct.this).load(imageUrl).into(imgProduct); // Tải ảnh sản phẩm
                     }
                 }
             }
@@ -149,6 +153,7 @@ public class RateProduct extends AppCompatActivity {
             }
         });
 
+        // Lấy số lượng từ node "orderDetails"
         databaseReference.child("orderDetails").orderByChild("orderId").equalTo(orderId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -158,11 +163,11 @@ public class RateProduct extends AppCompatActivity {
                             String detailProductId = detailSnapshot.child("productId").getValue(String.class);
                             if (productId.equals(detailProductId)) {
                                 Integer qty = detailSnapshot.child("quantity").getValue(Integer.class);
-                                quantity = qty != null ? qty : 1;
+                                quantity = qty != null ? qty : 1; // Gán số lượng, mặc định là 1 nếu null
                                 break;
                             }
                         }
-                        txtQuantity.setText("Quantity: " + quantity);
+                        txtQuantity.setText("Quantity: " + quantity); // Hiển thị số lượng
                     }
 
                     @Override
@@ -172,15 +177,27 @@ public class RateProduct extends AppCompatActivity {
                 });
     }
 
+    // Gửi đánh giá
     private void submitReview() {
-        String userName = chkAnonymous.isChecked() ? "Ẩn danh" : "Người dùng";
-        String userId = FirebaseAuth.getInstance().getCurrentUser() != null ?
-                FirebaseAuth.getInstance().getCurrentUser().getUid() : "2DEHJfC8PoOefz32QBW1Jh3kEtI3";
-        String reviewTitle = edtReviewTitle.getText().toString().trim();
-        String comment = edtComment.getText().toString().trim();
-        float rating = ratingBar.getRating();
-        String date = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser(); // Lấy thông tin người dùng hiện tại
+        String userId = currentUser != null ? currentUser.getUid() : "2DEHJfC8PoOefz32QBW1Jh3kEtI3"; // ID người dùng, mặc định nếu chưa đăng nhập
+        String userName; // Tên người dùng sẽ được xác định
 
+        // Kiểm tra ẩn danh và lấy tên người dùng
+        if (chkAnonymous.isChecked()) {
+            userName = "Ẩn danh"; // Nếu chọn ẩn danh
+        } else {
+            // Nếu không ẩn danh, lấy displayName từ FirebaseAuth
+            userName = currentUser != null && currentUser.getDisplayName() != null && !currentUser.getDisplayName().isEmpty()
+                    ? currentUser.getDisplayName() : "Người dùng không xác định"; // Lấy tên thật hoặc mặc định nếu không có
+        }
+
+        String reviewTitle = edtReviewTitle.getText().toString().trim(); // Tiêu đề đánh giá
+        String comment = edtComment.getText().toString().trim(); // Bình luận
+        float rating = ratingBar.getRating(); // Số sao
+        String date = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date()); // Ngày hiện tại
+
+        // Kiểm tra dữ liệu đầu vào
         if (rating == 0) {
             Toast.makeText(this, "Please select number of stars!", Toast.LENGTH_SHORT).show();
             return;
@@ -192,12 +209,13 @@ public class RateProduct extends AppCompatActivity {
 
         mediaUrls.clear(); // Xóa danh sách URL cũ
         if (!mediaList.isEmpty()) {
-            uploadMediaToCloudinary(0, userId, userName, rating, reviewTitle, date, comment);
+            uploadMediaToCloudinary(0, userId, userName, rating, reviewTitle, date, comment); // Upload media nếu có
         } else {
-            saveReviewToDatabase(userId, userName, rating, reviewTitle, date, mediaUrls, comment);
+            saveReviewToDatabase(userId, userName, rating, reviewTitle, date, mediaUrls, comment); // Lưu trực tiếp nếu không có media
         }
     }
 
+    // Upload media lên Cloudinary
     private void uploadMediaToCloudinary(int index, String userId, String userName, float rating, String reviewTitle,
                                          String date, String comment) {
         if (index >= mediaList.size()) {
@@ -206,10 +224,10 @@ public class RateProduct extends AppCompatActivity {
             return;
         }
 
-        Uri uri = mediaList.get(index);
+        Uri uri = mediaList.get(index); // Lấy URI của media
         try {
             MediaManager.get().upload(uri)
-                    .unsigned("my_unsigned_preset") // Thay bằng Upload Preset của bạn
+                    .unsigned("my_unsigned_preset") // Upload Preset của Cloudinary
                     .callback(new UploadCallback() {
                         @Override
                         public void onStart(String requestId) {
@@ -218,13 +236,13 @@ public class RateProduct extends AppCompatActivity {
 
                         @Override
                         public void onProgress(String requestId, long bytes, long totalBytes) {
-                            // Có thể hiển thị tiến trình upload nếu muốn
+                            // Có thể hiển thị tiến trình nếu muốn
                         }
 
                         @Override
                         public void onSuccess(String requestId, Map resultData) {
-                            String imageUrl = (String) resultData.get("secure_url");
-                            mediaUrls.add(imageUrl);
+                            String imageUrl = (String) resultData.get("secure_url"); // Lấy URL sau khi upload
+                            mediaUrls.add(imageUrl); // Thêm vào danh sách URL
 
                             // Tiếp tục upload media tiếp theo
                             uploadMediaToCloudinary(index + 1, userId, userName, rating, reviewTitle, date, comment);
@@ -246,15 +264,16 @@ public class RateProduct extends AppCompatActivity {
         }
     }
 
+    // Lưu đánh giá vào Firebase Database
     private void saveReviewToDatabase(String userId, String userName, float rating, String reviewTitle, String date,
                                       List<String> mediaUrls, String comment) {
         Review review = new Review(null, userId, userName, rating, productId, reviewTitle, date, mediaUrls,
-                comment, null, null, 0);
+                comment, null, null, 0); // Tạo đối tượng Review
 
-        databaseReference.child("reviews").push().setValue(review)
+        databaseReference.child("reviews").push().setValue(review) // Lưu vào node "reviews"
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Product review submitted successfully!", Toast.LENGTH_SHORT).show();
-                    finish();
+                    finish(); // Thoát sau khi gửi thành công
                 })
                 .addOnFailureListener(e -> Toast.makeText(this, "Error submitting review: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
@@ -264,7 +283,7 @@ public class RateProduct extends AppCompatActivity {
         private final List<Uri> mediaUris;
 
         public MediaPreviewAdapter(List<Uri> mediaUris) {
-            this.mediaUris = mediaUris;
+            this.mediaUris = mediaUris; // Khởi tạo danh sách
         }
 
         @NonNull
@@ -276,22 +295,23 @@ public class RateProduct extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull MediaViewHolder holder, int position) {
-            Uri uri = mediaUris.get(position);
-            holder.imagePreview.setImageURI(uri);
+            Uri uri = mediaUris.get(position); // Lấy URI tại vị trí
+            holder.imagePreview.setImageURI(uri); // Hiển thị ảnh preview
 
             holder.btnRemove.setOnClickListener(v -> {
-                mediaUris.remove(position);
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position, mediaUris.size());
+                mediaUris.remove(position); // Xóa media khỏi danh sách
+                notifyItemRemoved(position); // Thông báo xóa
+                notifyItemRangeChanged(position, mediaUris.size()); // Cập nhật giao diện
                 Toast.makeText(RateProduct.this, "Media deleted", Toast.LENGTH_SHORT).show();
             });
         }
 
         @Override
         public int getItemCount() {
-            return mediaUris.size();
+            return mediaUris.size(); // Trả về số lượng media
         }
 
+        // ViewHolder để lưu các thành phần giao diện
         public class MediaViewHolder extends RecyclerView.ViewHolder {
             ImageView imagePreview;
             ImageView btnRemove;

@@ -8,14 +8,6 @@
     android:orientation="horizontal"
     android:padding="16dp">
 
-    <!-- RadioButton để chọn địa chỉ -->
-    <RadioButton
-        android:id="@+id/radio_select"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:contentDescription="Chọn địa chỉ này" />
-
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -45,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:contentDescription="Chỉnh sửa địa chỉ"
-                android:text="Sửa"
+                android:text="Edit"
                 android:textColor="#E65100" />
         </LinearLayout>
 
@@ -76,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:contentDescription="Địa chỉ mặc định"
-            android:text="Mặc định"
+            android:text="Default"
             android:textColor="#E65100"
             android:textSize="15sp"
             android:visibility="gone" />
