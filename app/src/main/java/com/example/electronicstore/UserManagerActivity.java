@@ -59,9 +59,7 @@ public class UserManagerActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        backText.setOnClickListener(v -> {
-            startActivity(new Intent(UserManagerActivity.this, AdminDashboardActivity.class));
-        });
+        backText.setOnClickListener(v -> finish());
     }
 
     private void fetchUsers() {

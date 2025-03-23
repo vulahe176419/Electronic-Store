@@ -39,9 +39,7 @@ public class AddUserActivity extends AppCompatActivity {
 
         submitButton.setOnClickListener(v -> createUser());
 
-        backText.setOnClickListener(v -> {
-            startActivity(new Intent(AddUserActivity.this, UserManagerActivity.class));
-        });
+        backText.setOnClickListener(v -> finish());
     }
 
     private void createUser() {

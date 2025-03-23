@@ -2,7 +2,6 @@ package com.example.electronicstore;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -78,7 +77,7 @@ public class FilteredProductActivity extends AppCompatActivity {
                 if (auth.getCurrentUser() != null) {
                     startActivity(new Intent(FilteredProductActivity.this, SettingsActivity.class));
                 } else {
-                    startActivity(new Intent(FilteredProductActivity.this, PersonalActivity.class));
+                    startActivity(new Intent(FilteredProductActivity.this, BeforeLoginActivity.class));
                 }
                 return true;
             } else {

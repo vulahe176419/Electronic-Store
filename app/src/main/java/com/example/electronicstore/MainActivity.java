@@ -4,18 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Button;
+
 import androidx.appcompat.widget.SearchView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.electronicstore.adapter.CategoryAdapter;
+
 import com.example.electronicstore.adapter.MainProductAdapter;
-import com.example.electronicstore.adapter.ProductAdapter;
-import com.example.electronicstore.model.Category;
 import com.example.electronicstore.model.Product;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -66,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 if (auth.getCurrentUser() != null) {
                     startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                 } else {
-                    startActivity(new Intent(MainActivity.this, PersonalActivity.class));
+                    startActivity(new Intent(MainActivity.this, BeforeLoginActivity.class));
                 }
                 return true;
             } else {

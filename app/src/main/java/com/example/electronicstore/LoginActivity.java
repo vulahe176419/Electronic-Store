@@ -70,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
                             if (email.contains("@") && email.substring(email.indexOf("@")).contains("admin")) {
                                 startActivity(new Intent(LoginActivity.this, AdminDashboardActivity.class));
                             } else {
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                startActivity(new Intent(LoginActivity.this, SettingsActivity.class));
                             }
                             finish();
                         }

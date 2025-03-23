@@ -46,7 +46,7 @@ public class CategoryFilterActivity extends AppCompatActivity {
                         return true;
                     } else if (itemId == R.id.nav_profile) {
                         if (auth.getCurrentUser() != null) {
-                            startActivity(new Intent(CategoryFilterActivity.this, PersonalActivity.class));
+                            startActivity(new Intent(CategoryFilterActivity.this, BeforeLoginActivity.class));
                         } else {
                             startActivity(new Intent(CategoryFilterActivity.this, SettingsActivity.class));
                         }

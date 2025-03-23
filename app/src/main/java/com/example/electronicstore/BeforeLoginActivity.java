@@ -1,22 +1,16 @@
 package com.example.electronicstore;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class PersonalActivity extends AppCompatActivity {
+public class BeforeLoginActivity extends AppCompatActivity {
         private FirebaseAuth auth;
         private TextView loginText, signupText;
         private Button logoutButton;
@@ -25,7 +19,7 @@ public class PersonalActivity extends AppCompatActivity {
     @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_personal);
+            setContentView(R.layout.activity_before_login);
 
             auth = FirebaseAuth.getInstance();
 
@@ -34,35 +28,35 @@ public class PersonalActivity extends AppCompatActivity {
 //            logoutButton = findViewById(R.id.btn_logout);
 
             loginText.setOnClickListener(v -> {
-                startActivity(new Intent(PersonalActivity.this, LoginActivity.class));
+                startActivity(new Intent(BeforeLoginActivity.this, LoginActivity.class));
             });
 
             signupText.setOnClickListener(v -> {
-                startActivity(new Intent(PersonalActivity.this, SignupActivity.class));
+                startActivity(new Intent(BeforeLoginActivity.this, SignupActivity.class));
             });
-
-//            logoutButton.setOnClickListener(v -> {
-//                auth.signOut();
-//                Toast.makeText(PersonalActivity.this, "Logged out!", Toast.LENGTH_SHORT).show();
-//                startActivity(new Intent(PersonalActivity.this, LoginActivity.class));
-//                finish();
-//            });
 
             bottomNavigationView = findViewById(R.id.bottomNav);
 
             bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
                 int itemId = item.getItemId();
                 if (itemId == R.id.nav_home) {
-                    startActivity(new Intent(PersonalActivity.this, MainActivity.class));
                     return true;
                 } else if (itemId == R.id.nav_category) {
-//                        startActivity(new Intent(MainActivity.this, CategoryActivity.class));
+                    startActivity(new Intent(BeforeLoginActivity.this, CategoryFilterActivity.class));
                     return true;
                 } else if (itemId == R.id.nav_cart) {
-//                        startActivity(new Intent(MainActivity.this, CartActivity.class));
+                    if (auth.getCurrentUser() != null) {
+                        startActivity(new Intent(BeforeLoginActivity.this, CartActivity.class));
+                    } else {
+                        startActivity(new Intent(BeforeLoginActivity.this, LoginActivity.class));
+                    }
                     return true;
                 } else if (itemId == R.id.nav_profile) {
-                    startActivity(new Intent(PersonalActivity.this, PersonalActivity.class));
+                    if (auth.getCurrentUser() != null) {
+                        startActivity(new Intent(BeforeLoginActivity.this, SettingsActivity.class));
+                    } else {
+                        startActivity(new Intent(BeforeLoginActivity.this, BeforeLoginActivity.class));
+                    }
                     return true;
                 } else {
                     return false;
