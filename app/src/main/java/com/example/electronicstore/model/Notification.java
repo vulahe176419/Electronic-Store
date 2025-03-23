@@ -1,33 +1,40 @@
 package com.example.electronicstore.model;
 
 public class Notification {
+    private String id;
     private String title;
     private String message;
     private String time;
-    private int iconResId;
+    private boolean isRead;
+    private String userId;
 
-    public Notification(String title, String message, String time, int iconResId) {
+    public Notification() {
+    }
+
+    public Notification(String id, String title, String message, String time, boolean isRead, String userId) {
+        this.id = id;
         this.title = title;
         this.message = message;
         this.time = time;
-        this.iconResId = iconResId;
+        this.isRead = isRead;
+        this.userId = userId;
     }
 
-    public String getTitle() {
-        return title;
-    }
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
-    public String getMessage() {
-        return message;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public String getTime() {
-        return time;
-    }
+    public String getMessage() { return message; }
+    public void setMessage(String message) { this.message = message; }
 
-    public int getIconResId() {
-        return iconResId;
-    }
+    public String getTime() { return time; }
+    public void setTime(String time) { this.time = time; }
+
+    public boolean isRead() { return isRead; }
+    public void setRead(boolean read) { isRead = read; }
+
+    public String getUserId() { return userId; }
+    public void setUserId(String userId) { this.userId = userId; }
 }
-
-
