@@ -7,7 +7,6 @@ public class Order {
     private String Address;
     private String Status;
     private String TrackingNumber;
-
     private String productId;
     private String orderId;
 

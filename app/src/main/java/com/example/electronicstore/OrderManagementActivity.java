@@ -28,27 +28,30 @@ public class OrderManagementActivity extends AppCompatActivity {
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
             switch (position) {
                 case 0:
-                    tab.setText("Chờ lấy hàng");
+                    tab.setText("Pending orders");
                     tab.setContentDescription("Tab for pending orders");
                     break;
                 case 1:
-                    tab.setText("Chờ giao hàng");
+                    tab.setText("Shipping orders");
                     tab.setContentDescription("Tab for shipping orders");
                     break;
                 case 2:
-                    tab.setText("Đã giao");
+                    tab.setText("Delivered orders");
                     tab.setContentDescription("Tab for delivered orders");
                     break;
                 case 3:
-                    tab.setText("Trả hàng");
+                    tab.setText("Returned orders");
                     tab.setContentDescription("Tab for returned orders");
                     break;
                 case 4:
-                    tab.setText("Đã hủy");
+                    tab.setText("Canceled orders");
                     tab.setContentDescription("Tab for canceled orders");
                     break;
             }
         }).attach();
+
+        int selectedTabPosition = getIntent().getIntExtra("selected_tab_position", 0); // Mặc định là tab 0
+        viewPager.setCurrentItem(selectedTabPosition);
 
         findViewById(R.id.backButton).setOnClickListener(v -> onBackPressed());
     }

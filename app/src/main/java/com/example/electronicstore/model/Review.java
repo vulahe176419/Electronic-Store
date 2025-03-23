@@ -15,11 +15,9 @@ public class Review {
     private String variant;
     private String sellerReply;
     private int likes;
-
-    // Constructor mặc định (yêu cầu của Firebase)
     public Review() {}
 
-    // Constructor đầy đủ
+
     public Review(String id, String userId, String userName, float rating, String productId, String reviewTitle, String date,
                   List<String> mediaUrls, String comment, String variant, String sellerReply, int likes) {
         this.id = id;

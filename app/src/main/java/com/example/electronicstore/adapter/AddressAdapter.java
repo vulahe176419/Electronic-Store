@@ -48,9 +48,9 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressV
         holder.defaultLabel.setVisibility(address.isDefault() ? View.VISIBLE : View.GONE);
 
         // Accessibility
-        holder.nameTextView.setContentDescription("Tên địa chỉ: " + (address.getName() != null ? address.getName() : ""));
-        holder.addressTextView.setContentDescription("Địa chỉ: " + (address.getAddressLine1() != null ? address.getAddressLine1() : ""));
-        holder.phoneTextView.setContentDescription("Số điện thoại: " + (address.getPostalCode() != null ? address.getPostalCode() : ""));
+        holder.nameTextView.setContentDescription("Name address: " + (address.getName() != null ? address.getName() : ""));
+        holder.addressTextView.setContentDescription("Address: " + (address.getAddressLine1() != null ? address.getAddressLine1() : ""));
+        holder.phoneTextView.setContentDescription("Phone Number: " + (address.getPostalCode() != null ? address.getPostalCode() : ""));
 
         // RadioButton handling
         holder.radioSelect.setChecked(position == selectedPosition);

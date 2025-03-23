@@ -47,7 +47,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-
+    implementation ("com.cloudinary:cloudinary-android:2.2.0")
     implementation ("com.google.android.gms:play-services-measurement:21.3.0")
     implementation ("com.google.android.gms:play-services-maps:18.0.2")
     implementation ("com.google.android.gms:play-services-location:21.0.1")
@@ -66,4 +66,5 @@ dependencies {
     implementation ("com.google.code.gson:gson:2.8.9")
     implementation ("com.google.firebase:firebase-storage:20.3.0")
     implementation ("com.squareup.picasso:picasso:2.71828")
+
 }
