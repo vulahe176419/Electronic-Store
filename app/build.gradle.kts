@@ -66,5 +66,4 @@ dependencies {
     implementation ("com.google.code.gson:gson:2.8.9")
     implementation ("com.google.firebase:firebase-storage:20.3.0")
     implementation ("com.squareup.picasso:picasso:2.71828")
-
 }
