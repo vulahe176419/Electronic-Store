@@ -22,7 +22,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     private final List<Cart> carts;
     private final OnCartItemChangeListener listener;
 
-    // Interface để thông báo thay đổi số lượng hoặc xóa item
     public interface OnCartItemChangeListener {
         void onQuantityChanged(Cart item);
         void onItemRemoved(Cart item);
@@ -45,7 +44,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Cart item = carts.get(position);
 
-        // Hiển thị dữ liệu
         Glide.with(holder.itemView.getContext())
                 .load(item.getImage())
                 .placeholder(R.drawable.ic_launcher_background)
@@ -56,7 +54,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         holder.itemPrice.setText((formatter.format(item.getPrice()) + " VND"));
         holder.itemQuantity.setText(String.valueOf(item.getQuantity()));
 
-        // Nút giảm số lượng
         holder.decreaseButton.setOnClickListener(v -> {
             if (item.getQuantity() > 1) {
                 item.setQuantity(item.getQuantity() - 1);
@@ -65,14 +62,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             }
         });
 
-        // Nút tăng số lượng
         holder.increaseButton.setOnClickListener(v -> {
             item.setQuantity(item.getQuantity() + 1);
             holder.itemQuantity.setText(String.valueOf(item.getQuantity()));
             if (listener != null) listener.onQuantityChanged(item);
         });
 
-        // Nút xóa item
         holder.deleteButton.setOnClickListener(v -> {
             int pos = holder.getAdapterPosition();
             if (pos != RecyclerView.NO_POSITION) {

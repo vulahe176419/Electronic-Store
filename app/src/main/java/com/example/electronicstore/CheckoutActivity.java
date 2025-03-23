@@ -208,15 +208,15 @@ public class CheckoutActivity extends AppCompatActivity {
         } else if (selectedId == R.id.walletRadio) {
             return "Digital Wallet";
         }
-        return "Cash on Delivery"; // Mặc định
+        return "Cash on Delivery";
     }
 
     private String getSelectedAddress() {
         int selectedId = addressRadioGroup.getCheckedRadioButtonId();
         if (selectedId == -1) {
-            return null; // Không có địa chỉ nào được chọn
+            return null;
         }
         RadioButton selectedRadioButton = findViewById(selectedId);
-        return (String) selectedRadioButton.getTag(); // Lấy addressLine1 từ tag
+        return (String) selectedRadioButton.getTag();
     }
 }

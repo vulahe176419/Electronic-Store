@@ -90,7 +90,7 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnCar
                     String id = snapshot.getKey();
 
                     String cartUserId = snapshot.child("userId").getValue(String.class);
-                    if (cartUserId != null && cartUserId.equals(userId)) { // Lọc theo userId
+                    if (cartUserId != null && cartUserId.equals(userId)) {
                         Integer cartId = snapshot.child("cartId").getValue(Integer.class);
                         if (cartId == null) cartId = 0;
 

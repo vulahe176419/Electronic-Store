@@ -16,7 +16,6 @@
         android:title="Shopping Cart"
         android:titleTextColor="#000000" />
 
-    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cartRecyclerView"
         android:layout_width="match_parent"
@@ -35,7 +34,6 @@
         android:padding="16dp"
         android:elevation="4dp">
 
-        <!-- Subtotal -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -54,7 +52,6 @@
                 android:textSize="16sp"/>
         </LinearLayout>
 
-        <!-- Shipping -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -74,7 +71,6 @@
                 android:textSize="16sp"/>
         </LinearLayout>
 
-        <!-- Total -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -96,7 +92,6 @@
                 android:textStyle="bold"/>
         </LinearLayout>
 
-        <!-- Checkout Button -->
         <Button
             android:id="@+id/checkoutButton"
             android:layout_width="match_parent"
