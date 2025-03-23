@@ -25,12 +25,12 @@
                 android:textStyle="bold"
                 android:layout_weight="1"/>
 
-<!--            <ImageView-->
-<!--                android:id="@+id/btn_notification"-->
-<!--                android:layout_width="24dp"-->
-<!--                android:layout_height="24dp"-->
-<!--                android:src="@drawable/ic_notification"-->
-<!--                android:contentDescription="Settings"/>-->
+            <ImageView
+                android:id="@+id/btn_notification"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_notification"
+                android:contentDescription="Settings"/>
         </LinearLayout>
 
         <LinearLayout
