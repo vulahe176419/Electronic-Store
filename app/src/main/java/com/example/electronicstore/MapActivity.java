@@ -40,7 +40,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             if (selectedLatLng != null) {
                 convertLatLngToAddress(selectedLatLng);
             } else {
-                Toast.makeText(this, "Vui lòng chọn một vị trí trên bản đồ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please select a location on the map", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -58,7 +58,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         if (selectedMarker != null) {
             selectedMarker.remove();
         }
-        selectedMarker = mMap.addMarker(new MarkerOptions().position(latLng).title("Vị trí đã chọn"));
+        selectedMarker = mMap.addMarker(new MarkerOptions().position(latLng).title("Selected location"));
         selectedLatLng = latLng;
         btnConfirmLocation.setEnabled(true);
     }
@@ -74,11 +74,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 setResult(RESULT_OK, resultIntent);
                 finish();
             } else {
-                Toast.makeText(this, "Không thể lấy địa chỉ từ vị trí này", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Cannot get address from this location", Toast.LENGTH_SHORT).show();
             }
         } catch (IOException e) {
             Log.e("MapActivity", "Geocoder error: " + e.getMessage());
-            Toast.makeText(this, "Lỗi khi lấy địa chỉ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Error getting address", Toast.LENGTH_SHORT).show();
         }
     }
 }

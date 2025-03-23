@@ -24,6 +24,7 @@ public class MediaPreviewAdapter extends RecyclerView.Adapter<MediaPreviewAdapte
         void onRemove(int position);
     }
 
+
     public MediaPreviewAdapter(Context context, List<?> mediaList, OnItemRemoveListener listener) {
         this.context = context;
         this.mediaList = mediaList;
@@ -34,20 +35,22 @@ public class MediaPreviewAdapter extends RecyclerView.Adapter<MediaPreviewAdapte
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_media_preview, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view); // Tạo ViewHolder mới
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Object media = mediaList.get(position);
-        String mediaUriString = media instanceof Uri ? media.toString() : (String) media;
+        Object media = mediaList.get(position); // Lấy media tại vị trí
+        String mediaUriString = media instanceof Uri ? media.toString() : (String) media; // Chuyển đổi URI
 
+        // Tải media bằng Glide
         Glide.with(context)
                 .load(mediaUriString)
-                .placeholder(android.R.drawable.ic_menu_gallery)
-                .error(android.R.drawable.ic_dialog_alert)
+                .placeholder(android.R.drawable.ic_menu_gallery) // Ảnh placeholder
+                .error(android.R.drawable.ic_dialog_alert) // Ảnh lỗi
                 .into(holder.imgMediaPreview);
 
+        // Xác định loại media
         String mimeType = context.getContentResolver().getType(Uri.parse(mediaUriString));
         if (mimeType != null && mimeType.startsWith("image")) {
             holder.txtMediaType.setText("Image");
@@ -57,6 +60,7 @@ public class MediaPreviewAdapter extends RecyclerView.Adapter<MediaPreviewAdapte
             holder.txtMediaType.setText("Media");
         }
 
+        // Sự kiện nhấn để xem media
         holder.itemView.setOnClickListener(v -> {
             Intent intent;
             if (mimeType != null && mimeType.startsWith("video")) {
@@ -69,9 +73,10 @@ public class MediaPreviewAdapter extends RecyclerView.Adapter<MediaPreviewAdapte
             context.startActivity(intent);
         });
 
+        // Hiển thị và xử lý nút xóa
         if (removeListener != null) {
             holder.btnRemove.setVisibility(View.VISIBLE);
-            holder.btnRemove.setOnClickListener(v -> removeListener.onRemove(position));
+            holder.btnRemove.setOnClickListener(v -> removeListener.onRemove(position)); // Gọi listener khi nhấn xóa
         } else {
             holder.btnRemove.setVisibility(View.GONE);
         }
@@ -79,9 +84,10 @@ public class MediaPreviewAdapter extends RecyclerView.Adapter<MediaPreviewAdapte
 
     @Override
     public int getItemCount() {
-        return mediaList.size();
+        return mediaList.size(); // Trả về số lượng media
     }
 
+    // ViewHolder để lưu các thành phần giao diện
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imgMediaPreview;
         TextView txtMediaType;

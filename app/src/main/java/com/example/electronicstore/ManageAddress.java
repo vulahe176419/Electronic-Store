@@ -69,7 +69,7 @@ public class ManageAddress extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true); // Tối ưu hiệu suất nếu kích thước item không thay đổi
         addressList = new ArrayList<>();
-        addressAdapter = new AddressAdapter(this, addressList, this::onAddressSelected);
+        addressAdapter = new AddressAdapter(this, addressList);
         recyclerView.setAdapter(addressAdapter);
     }
 

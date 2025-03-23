@@ -18,16 +18,15 @@ import java.util.List;
 
 public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressViewHolder> {
     private List<Address> addressList = new ArrayList<>();
-    private final OnAddressSelectedListener listener;
+
     private final Context context;
     private int selectedPosition = -1;
 
-    public AddressAdapter(Context context, List<Address> addressList, OnAddressSelectedListener listener) {
+    public AddressAdapter(Context context, List<Address> addressList) {
         this.context = context;
         if (addressList != null) {
             this.addressList = addressList;
         }
-        this.listener = listener;
     }
 
     @NonNull
@@ -52,16 +51,6 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressV
         holder.addressTextView.setContentDescription("Address: " + (address.getAddressLine1() != null ? address.getAddressLine1() : ""));
         holder.phoneTextView.setContentDescription("Phone Number: " + (address.getPostalCode() != null ? address.getPostalCode() : ""));
 
-        // RadioButton handling
-        holder.radioSelect.setChecked(position == selectedPosition);
-        holder.radioSelect.setOnClickListener(v -> {
-            int adapterPosition = holder.getAdapterPosition();
-            if (listener != null && adapterPosition != RecyclerView.NO_POSITION) {
-                selectedPosition = adapterPosition;
-                listener.onAddressSelected(addressList.get(adapterPosition));
-                notifyDataSetChanged();
-            }
-        });
 
         holder.editButton.setOnClickListener(v -> {
             int adapterPosition = holder.getAdapterPosition();
@@ -94,12 +83,8 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressV
             addressTextView = itemView.findViewById(R.id.address_text_view);
             phoneTextView = itemView.findViewById(R.id.phone_text_view);
             defaultLabel = itemView.findViewById(R.id.default_label);
-            radioSelect = itemView.findViewById(R.id.radio_select);
             editButton = itemView.findViewById(R.id.edit_button);
         }
     }
 
-    public interface OnAddressSelectedListener {
-        void onAddressSelected(Address address);
-    }
 }

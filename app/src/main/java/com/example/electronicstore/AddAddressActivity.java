@@ -89,7 +89,7 @@ public class AddAddressActivity extends AppCompatActivity {
     private void initializeViews() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Địa chỉ mới");
+        getSupportActionBar().setTitle("New address");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(v -> finish());
 
@@ -110,7 +110,7 @@ public class AddAddressActivity extends AppCompatActivity {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 if (locationResult == null) {
-                    Toast.makeText(AddAddressActivity.this, "Không thể cập nhật vị trí", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddAddressActivity.this, "Unable to update location", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 Location location = locationResult.getLastLocation();
@@ -118,7 +118,7 @@ public class AddAddressActivity extends AppCompatActivity {
                     updateAddressFromLocation(location);
                     stopLocationUpdates();
                 } else {
-                    Toast.makeText(AddAddressActivity.this, "Đang chờ vị trí mới...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddAddressActivity.this, "Waiting for new position...", Toast.LENGTH_SHORT).show();
                 }
             }
         };
@@ -139,7 +139,7 @@ public class AddAddressActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                     REQUEST_LOCATION_PERMISSION);
         } else if (!isLocationEnabled()) {
-            Toast.makeText(this, "Vui lòng bật dịch vụ định vị", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please enable location services", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             startActivityForResult(intent, REQUEST_ENABLE_LOCATION);
         } else {
@@ -160,7 +160,7 @@ public class AddAddressActivity extends AppCompatActivity {
             return;
         }
 
-        Toast.makeText(this, "Đang cập nhật vị trí...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Updating location...", Toast.LENGTH_SHORT).show();
 
         LocationRequest locationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
@@ -173,12 +173,12 @@ public class AddAddressActivity extends AppCompatActivity {
                     timeoutHandler.postDelayed(() -> {
                         if (fusedLocationClient != null) {
                             fusedLocationClient.removeLocationUpdates(locationCallback);
-                            Toast.makeText(this, "Hết thời gian chờ vị trí", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Position timed out", Toast.LENGTH_SHORT).show();
                         }
                     }, LOCATION_TIMEOUT);
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Lỗi yêu cầu vị trí: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Location request error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -200,7 +200,7 @@ public class AddAddressActivity extends AppCompatActivity {
                 editAddress.setText("Lat: " + location.getLatitude() + ", Lng: " + location.getLongitude());
             }
         } catch (IOException e) {
-            Toast.makeText(this, "Không thể lấy địa chỉ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Unable to get address", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -219,13 +219,13 @@ public class AddAddressActivity extends AppCompatActivity {
             if (selectedAddress != null) {
                 editAddress.setText(selectedAddress);
             } else {
-                Toast.makeText(this, "Không thể lấy địa chỉ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Unable to get address", Toast.LENGTH_SHORT).show();
             }
         } else if (requestCode == REQUEST_ENABLE_LOCATION) {
             if (isLocationEnabled()) {
                 requestCurrentLocation();
             } else {
-                Toast.makeText(this, "Dịch vụ định vị vẫn chưa được bật", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Location services are not yet enabled", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -255,18 +255,18 @@ public class AddAddressActivity extends AppCompatActivity {
 
         boolean isValid = true;
         if (name.isEmpty()) {
-            tilName.setError("Vui lòng nhập họ và tên");
+            tilName.setError("Please enter your full name");
             isValid = false;
         }
         if (phone.isEmpty()) {
-            tilPhone.setError("Vui lòng nhập số điện thoại");
+            tilPhone.setError("Please enter phone number");
             isValid = false;
         } else if (!PHONE_PATTERN.matcher(phone).matches()) {
-            tilPhone.setError("Số điện thoại không hợp lệ (10 chữ số)");
+            tilPhone.setError("Invalid phone number (10 digits)");
             isValid = false;
         }
         if (address.isEmpty()) {
-            tilAddress.setError("Vui lòng nhập địa chỉ");
+            tilAddress.setError("Please enter address");
             isValid = false;
         }
         return isValid;
@@ -279,14 +279,14 @@ public class AddAddressActivity extends AppCompatActivity {
         if (address.isDefault()) {
             resetDefaultAddress(() -> mDatabase.child(key).setValue(address)
                     .addOnSuccessListener(aVoid -> {
-                        Toast.makeText(this, "Thêm địa chỉ thành công", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Add address successfully", Toast.LENGTH_SHORT).show();
                         finish();
                     })
                     .addOnFailureListener(e -> Toast.makeText(this, "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show()));
         } else {
             mDatabase.child(key).setValue(address)
                     .addOnSuccessListener(aVoid -> {
-                        Toast.makeText(this, "Thêm địa chỉ thành công", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Add address successfully", Toast.LENGTH_SHORT).show();
                         finish();
                     })
                     .addOnFailureListener(e -> Toast.makeText(this, "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show());
@@ -297,14 +297,14 @@ public class AddAddressActivity extends AppCompatActivity {
         if (address.isDefault()) {
             resetDefaultAddress(() -> mDatabase.child(address.getKey()).setValue(address)
                     .addOnSuccessListener(aVoid -> {
-                        Toast.makeText(this, "Cập nhật địa chỉ thành công", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Address update successful", Toast.LENGTH_SHORT).show();
                         finish();
                     })
                     .addOnFailureListener(e -> Toast.makeText(this, "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show()));
         } else {
             mDatabase.child(address.getKey()).setValue(address)
                     .addOnSuccessListener(aVoid -> {
-                        Toast.makeText(this, "Cập nhật địa chỉ thành công", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Address update successful", Toast.LENGTH_SHORT).show();
                         finish();
                     })
                     .addOnFailureListener(e -> Toast.makeText(this, "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show());
@@ -315,7 +315,7 @@ public class AddAddressActivity extends AppCompatActivity {
         if (addressToEdit != null) {
             mDatabase.child(addressToEdit.getKey()).removeValue()
                     .addOnSuccessListener(aVoid -> {
-                        Toast.makeText(this, "Xóa địa chỉ thành công", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Address deleted successfully", Toast.LENGTH_SHORT).show();
                         finish();
                     })
                     .addOnFailureListener(e -> Toast.makeText(this, "Lỗi khi xóa: " + e.getMessage(), Toast.LENGTH_SHORT).show());
@@ -339,7 +339,7 @@ public class AddAddressActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        Toast.makeText(AddAddressActivity.this, "Lỗi: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddAddressActivity.this, "Error: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -352,7 +352,7 @@ public class AddAddressActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 requestLocation();
             } else {
-                Toast.makeText(this, "Quyền truy cập vị trí bị từ chối", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Location access denied", Toast.LENGTH_SHORT).show();
             }
         }
     }
