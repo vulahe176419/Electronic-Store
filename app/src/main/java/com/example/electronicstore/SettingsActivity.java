@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,7 @@ public class SettingsActivity extends AppCompatActivity {
     private Button btnEditProfile;
     private TextView tvUserName, tvUserEmail;
     private DatabaseReference databaseReference;
+    private ImageView btnNotification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +106,7 @@ public class SettingsActivity extends AppCompatActivity {
         btnFAQ = findViewById(R.id.btn_faqs);
         btnIssue = findViewById(R.id.btn_report_issue);
         btnTerm = findViewById(R.id.btn_terms_policies);
+        btnNotification = findViewById(R.id.btn_notification);
 
         logoutButton.setOnClickListener(v -> {
             auth.signOut();
@@ -146,6 +149,11 @@ public class SettingsActivity extends AppCompatActivity {
 
         btnOrder.setOnClickListener(v -> {
             Intent intent = new Intent(SettingsActivity.this, OrderManagementActivity.class);
+            startActivity(intent);
+        });
+
+        btnNotification.setOnClickListener(v -> {
+            Intent intent = new Intent(SettingsActivity.this, NotificationsActivity.class);
             startActivity(intent);
         });
 
