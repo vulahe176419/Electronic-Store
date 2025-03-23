@@ -38,10 +38,11 @@ public class OrderFragment extends Fragment {
     private final List<Order> orderList = new ArrayList<>();
     private final Map<String, Product> productMap = new HashMap<>();
     private final Map<String, Integer> totalItemsMap = new HashMap<>();
+    private final Map<String, Boolean> reviewStatusMap = new HashMap<>(); // Thêm để theo dõi trạng thái đánh giá
     private DatabaseReference databaseReference;
     private FirebaseAuth auth;
     private ValueEventListener ordersListener;
-    private ValueEventListener reviewsListener; // Thêm listener cho reviews
+    private ValueEventListener reviewsListener;
 
     public static OrderFragment newInstance(String status) {
         OrderFragment fragment = new OrderFragment();
@@ -67,11 +68,14 @@ public class OrderFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_order, container, false);
         recyclerView = view.findViewById(R.id.orderRecyclerView);
         loadingProgressBar = view.findViewById(R.id.loadingProgressBar);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new OrderAdapter(getActivity(), orderList, productMap, totalItemsMap, status);
         recyclerView.setAdapter(adapter);
+
         setupOrdersListener();
-        setupReviewsListener(); // Thêm listener cho reviews
+        setupReviewsListener();
+
         return view;
     }
 
@@ -79,127 +83,151 @@ public class OrderFragment extends Fragment {
         loadingProgressBar.setVisibility(View.VISIBLE);
         String userId = auth.getCurrentUser() != null ? auth.getCurrentUser().getUid() : null;
         if (userId == null) {
-            Toast.makeText(getContext(), "Vui lòng đăng nhập để xem đơn hàng", Toast.LENGTH_SHORT).show();
+            showToast("Vui lòng đăng nhập để xem đơn hàng");
             loadingProgressBar.setVisibility(View.GONE);
             return;
         }
 
-        ordersListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                orderList.clear();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Order order = dataSnapshot.getValue(Order.class);
-                    if (order != null) {
-                        String orderStatus = dataSnapshot.child("status").getValue(String.class);
-                        order.setStatus(orderStatus);
-                        if (orderStatus != null && status.equals(orderStatus)) {
-                            order.setOrderId(dataSnapshot.getKey());
-                            orderList.add(order);
+        new Thread(() -> {
+            ordersListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    orderList.clear();
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        Order order = dataSnapshot.getValue(Order.class);
+                        if (order != null) {
+                            String orderStatus = dataSnapshot.child("status").getValue(String.class);
+                            order.setStatus(orderStatus);
+                            if (orderStatus != null && status.equals(orderStatus)) {
+                                order.setOrderId(dataSnapshot.getKey());
+                                orderList.add(order);
+                            }
                         }
                     }
+                    if (!orderList.isEmpty()) {
+                        loadOrderDetails();
+                    } else {
+                        updateUI();
+                    }
                 }
-                if (!orderList.isEmpty()) {
-                    loadOrderDetails();
-                } else {
-                    adapter.notifyDataSetChanged();
-                    loadingProgressBar.setVisibility(View.GONE);
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    showToast("Lỗi tải đơn hàng: " + error.getMessage());
+                    updateUI();
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Lỗi tải đơn hàng: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                loadingProgressBar.setVisibility(View.GONE);
-            }
-        };
-
-        databaseReference.child("orders")
-                .orderByChild("userId").equalTo(userId)
-                .addValueEventListener(ordersListener);
+            };
+            databaseReference.child("orders")
+                    .orderByChild("userId").equalTo(userId)
+                    .addListenerForSingleValueEvent(ordersListener); // Chỉ tải một lần
+        }).start();
     }
 
     private void loadOrderDetails() {
-        databaseReference.child("orderDetails")
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        totalItemsMap.clear();
-                        for (Order order : orderList) {
-                            int itemCount = 0;
-                            for (DataSnapshot detailSnapshot : snapshot.getChildren()) {
-                                String orderId = detailSnapshot.child("orderId").getValue(String.class);
-                                if (orderId != null && orderId.equals(order.getOrderId())) {
-                                    String productId = detailSnapshot.child("productId").getValue(String.class);
-                                    if (order.getProductId() == null) {
-                                        order.setProductId(productId);
+        new Thread(() -> {
+            databaseReference.child("orderDetails")
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            totalItemsMap.clear();
+                            for (Order order : orderList) {
+                                int itemCount = 0;
+                                for (DataSnapshot detailSnapshot : snapshot.getChildren()) {
+                                    String orderId = detailSnapshot.child("orderId").getValue(String.class);
+                                    if (orderId != null && orderId.equals(order.getOrderId())) {
+                                        String productId = detailSnapshot.child("productId").getValue(String.class);
+                                        if (order.getProductId() == null) {
+                                            order.setProductId(productId);
+                                        }
+                                        itemCount++;
                                     }
-                                    itemCount++;
                                 }
+                                totalItemsMap.put(order.getOrderId(), itemCount);
                             }
-                            totalItemsMap.put(order.getOrderId(), itemCount);
+                            loadProducts();
                         }
-                        loadProducts();
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(getContext(), "Lỗi tải chi tiết đơn hàng", Toast.LENGTH_SHORT).show();
-                        loadingProgressBar.setVisibility(View.GONE);
-                    }
-                });
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            showToast("Lỗi tải chi tiết đơn hàng");
+                            updateUI();
+                        }
+                    });
+        }).start();
     }
 
     private void loadProducts() {
-        databaseReference.child("products")
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        productMap.clear();
-                        for (Order order : orderList) {
-                            if (order.getProductId() != null) {
-                                DataSnapshot productSnapshot = snapshot.child(order.getProductId());
-                                Product product = productSnapshot.getValue(Product.class);
-                                if (product != null) {
-                                    product.setPid(order.getProductId());
-                                    productMap.put(order.getProductId(), product);
+        new Thread(() -> {
+            databaseReference.child("products")
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            productMap.clear();
+                            for (Order order : orderList) {
+                                if (order.getProductId() != null) {
+                                    DataSnapshot productSnapshot = snapshot.child(order.getProductId());
+                                    Product product = productSnapshot.getValue(Product.class);
+                                    if (product != null) {
+                                        product.setPid(order.getProductId());
+                                        productMap.put(order.getProductId(), product);
+                                    }
                                 }
                             }
+                            updateUI();
                         }
-                        adapter.notifyDataSetChanged();
-                        loadingProgressBar.setVisibility(View.GONE);
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(getContext(), "Lỗi tải sản phẩm", Toast.LENGTH_SHORT).show();
-                        loadingProgressBar.setVisibility(View.GONE);
-                    }
-                });
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            showToast("Lỗi tải sản phẩm");
+                            updateUI();
+                        }
+                    });
+        }).start();
     }
 
     private void setupReviewsListener() {
         String userId = auth.getCurrentUser() != null ? auth.getCurrentUser().getUid() : null;
-        if (userId == null) {
-            return;
-        }
+        if (userId == null) return;
 
-        reviewsListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // Khi có thay đổi trong reviews, chỉ cần làm mới giao diện
+        new Thread(() -> {
+            reviewsListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    reviewStatusMap.clear();
+                    for (DataSnapshot reviewSnapshot : snapshot.getChildren()) {
+                        String productId = reviewSnapshot.child("productId").getValue(String.class);
+                        if (productId != null) {
+                            reviewStatusMap.put(productId, true);
+                        }
+                    }
+                    updateUI();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    showToast("Lỗi tải đánh giá: " + error.getMessage());
+                }
+            };
+            databaseReference.child("reviews")
+                    .orderByChild("userId").equalTo(userId)
+                    .addListenerForSingleValueEvent(reviewsListener);
+        }).start();
+    }
+
+    private void updateUI() {
+        if (getActivity() != null && !getActivity().isFinishing()) {
+            getActivity().runOnUiThread(() -> {
                 adapter.notifyDataSetChanged();
-            }
+                loadingProgressBar.setVisibility(View.GONE);
+            });
+        }
+    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Lỗi tải đánh giá: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        };
-
-        databaseReference.child("reviews")
-                .orderByChild("userId").equalTo(userId)
-                .addValueEventListener(reviewsListener);
+    private void showToast(String message) {
+        if (getActivity() != null && !getActivity().isFinishing()) {
+            getActivity().runOnUiThread(() ->
+                    Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show());
+        }
     }
 
     @Override
@@ -212,5 +240,4 @@ public class OrderFragment extends Fragment {
             databaseReference.child("reviews").removeEventListener(reviewsListener);
         }
     }
-
 }
