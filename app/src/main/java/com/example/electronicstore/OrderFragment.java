@@ -37,9 +37,11 @@ public class OrderFragment extends Fragment {
     private OrderAdapter adapter;
     private final List<Order> orderList = new ArrayList<>();
     private final Map<String, Product> productMap = new HashMap<>();
-    private final Map<String, Integer> totalItemsMap = new HashMap<>(); // Thêm map để lưu tổng số sản phẩm
+    private final Map<String, Integer> totalItemsMap = new HashMap<>();
     private DatabaseReference databaseReference;
     private FirebaseAuth auth;
+    private ValueEventListener ordersListener;
+    private ValueEventListener reviewsListener; // Thêm listener cho reviews
 
     public static OrderFragment newInstance(String status) {
         OrderFragment fragment = new OrderFragment();
@@ -66,13 +68,14 @@ public class OrderFragment extends Fragment {
         recyclerView = view.findViewById(R.id.orderRecyclerView);
         loadingProgressBar = view.findViewById(R.id.loadingProgressBar);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new OrderAdapter(getContext(), orderList, productMap, totalItemsMap, status);
+        adapter = new OrderAdapter(getActivity(), orderList, productMap, totalItemsMap, status);
         recyclerView.setAdapter(adapter);
-        loadOrders();
+        setupOrdersListener();
+        setupReviewsListener(); // Thêm listener cho reviews
         return view;
     }
 
-    private void loadOrders() {
+    private void setupOrdersListener() {
         loadingProgressBar.setVisibility(View.VISIBLE);
         String userId = auth.getCurrentUser() != null ? auth.getCurrentUser().getUid() : null;
         if (userId == null) {
@@ -81,33 +84,39 @@ public class OrderFragment extends Fragment {
             return;
         }
 
-        databaseReference.child("orders")
-                .orderByChild("UserId").equalTo(userId)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        orderList.clear();
-                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                            Order order = dataSnapshot.getValue(Order.class);
-                            if (order != null && status.equals(order.getStatus())) {
-                                order.setOrderId(dataSnapshot.getKey());
-                                orderList.add(order);
-                            }
-                        }
-                        if (!orderList.isEmpty()) {
-                            loadOrderDetails();
-                        } else {
-                            adapter.notifyDataSetChanged();
-                            loadingProgressBar.setVisibility(View.GONE);
+        ordersListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                orderList.clear();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Order order = dataSnapshot.getValue(Order.class);
+                    if (order != null) {
+                        String orderStatus = dataSnapshot.child("status").getValue(String.class);
+                        order.setStatus(orderStatus);
+                        if (orderStatus != null && status.equals(orderStatus)) {
+                            order.setOrderId(dataSnapshot.getKey());
+                            orderList.add(order);
                         }
                     }
+                }
+                if (!orderList.isEmpty()) {
+                    loadOrderDetails();
+                } else {
+                    adapter.notifyDataSetChanged();
+                    loadingProgressBar.setVisibility(View.GONE);
+                }
+            }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(getContext(), "Lỗi tải đơn hàng: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                        loadingProgressBar.setVisibility(View.GONE);
-                    }
-                });
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), "Lỗi tải đơn hàng: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                loadingProgressBar.setVisibility(View.GONE);
+            }
+        };
+
+        databaseReference.child("orders")
+                .orderByChild("userId").equalTo(userId)
+                .addValueEventListener(ordersListener);
     }
 
     private void loadOrderDetails() {
@@ -119,13 +128,13 @@ public class OrderFragment extends Fragment {
                         for (Order order : orderList) {
                             int itemCount = 0;
                             for (DataSnapshot detailSnapshot : snapshot.getChildren()) {
-                                String orderId = detailSnapshot.child("OrderId").getValue(String.class);
+                                String orderId = detailSnapshot.child("orderId").getValue(String.class);
                                 if (orderId != null && orderId.equals(order.getOrderId())) {
-                                    String productId = detailSnapshot.child("ProductId").getValue(String.class);
-                                    if (order.getProductId() == null) { // Chỉ gán productId cho sản phẩm đầu tiên
+                                    String productId = detailSnapshot.child("productId").getValue(String.class);
+                                    if (order.getProductId() == null) {
                                         order.setProductId(productId);
                                     }
-                                    itemCount++; // Đếm tổng số sản phẩm
+                                    itemCount++;
                                 }
                             }
                             totalItemsMap.put(order.getOrderId(), itemCount);
@@ -168,4 +177,40 @@ public class OrderFragment extends Fragment {
                     }
                 });
     }
+
+    private void setupReviewsListener() {
+        String userId = auth.getCurrentUser() != null ? auth.getCurrentUser().getUid() : null;
+        if (userId == null) {
+            return;
+        }
+
+        reviewsListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // Khi có thay đổi trong reviews, chỉ cần làm mới giao diện
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), "Lỗi tải đánh giá: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        databaseReference.child("reviews")
+                .orderByChild("userId").equalTo(userId)
+                .addValueEventListener(reviewsListener);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (ordersListener != null) {
+            databaseReference.child("orders").removeEventListener(ordersListener);
+        }
+        if (reviewsListener != null) {
+            databaseReference.child("reviews").removeEventListener(reviewsListener);
+        }
+    }
+
 }

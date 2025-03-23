@@ -6,8 +6,6 @@
     android:padding="8dp"
     android:background="#F5F5F5">
 
-    <!-- Tên cửa hàng (đã bị xóa theo yêu cầu trước đó, nên bỏ qua) -->
-
     <!-- Container sản phẩm -->
     <LinearLayout
         android:id="@+id/productContainer"
@@ -18,14 +16,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Hình ảnh sản phẩm -->
         <ImageView
             android:id="@+id/productImage"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:scaleType="centerCrop"/>
 
-        <!-- Thông tin sản phẩm -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -82,21 +78,30 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <Button
+            android:id="@+id/cancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel order"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#03A9F4"
+        android:visibility="gone"/>
+
+        <Button
             android:id="@+id/returnButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Trả hàng/Hoàn tiền"
+            android:text="Returns"
             android:textColor="#FFFFFF"
-            android:background="#CCCCCC"
+            android:backgroundTint="#CCCCCC"
             android:visibility="gone"/>
 
         <Button
             android:id="@+id/reviewButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Đánh giá"
+            android:text="Rate"
             android:textColor="#FFFFFF"
-            android:background="#FF0000"
+            android:backgroundTint="#03A9F4"
             android:visibility="gone"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

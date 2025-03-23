@@ -5,6 +5,15 @@
     android:orientation="vertical"
     android:padding="12dp">
 
+    <!-- Nút Back -->
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_back"
+        android:padding="8dp"
+        android:layout_marginBottom="12dp"/>
+
     <!-- Thông tin sản phẩm: Hình ảnh + Tên + Số lượng -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:text="Tên sản phẩm"
+                android:text="Name Product"
                 android:maxLines="2"
                 android:ellipsize="end"/>
 
@@ -44,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textColor="#666666"
-                android:text="Số lượng: 1"
+                android:text="Quantity: 1"
                 android:layout_marginTop="4dp"/>
         </LinearLayout>
     </LinearLayout>
@@ -60,7 +69,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Đánh giá sản phẩm: "/>
+            android:text="Rate products: "/>
 
         <RatingBar
             android:id="@+id/ratingBar"
@@ -83,8 +92,9 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Hình ảnh"
-            android:drawableTop="@android:drawable/ic_menu_gallery"/>
+            android:text="Image"
+            android:drawableTop="@android:drawable/ic_menu_gallery"
+            android:backgroundTint="@color/light_blue"/>
 
         <Button
             android:id="@+id/btnAddVideo"
@@ -92,7 +102,8 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="Video"
-            android:drawableTop="@android:drawable/ic_menu_camera"/>
+            android:drawableTop="@android:drawable/ic_menu_camera"
+            android:backgroundTint="@color/light_blue"/>
     </LinearLayout>
 
     <!-- RecyclerView hiển thị danh sách media đã chọn -->
@@ -109,7 +120,7 @@
         android:id="@+id/edtReviewTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Tiêu đề đánh giá chất lượng sản phẩm"
+        android:hint="Product quality review title"
         android:textSize="16sp"
         android:padding="8dp"
         android:layout_marginTop="8dp"/>
@@ -120,7 +131,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:hint="Mô tả chi tiết đánh giá"
+        android:hint="Detailed description of the review"
         android:textSize="14sp"
         android:padding="8dp"
         android:gravity="top"
@@ -134,7 +145,7 @@
         android:id="@+id/chkAnonymous"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Đánh giá ẩn danh"
+        android:text="Anonymous review"
         android:layout_marginTop="8dp"/>
 
     <!-- Nút Submit -->
@@ -142,8 +153,8 @@
         android:id="@+id/btnSubmit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Gửi"
-        android:backgroundTint="@color/orange"
+        android:text="Send"
+        android:backgroundTint="@color/light_blue"
         android:textColor="@android:color/white"
         android:layout_marginTop="12dp"/>
 </LinearLayout>
