@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- Quyền truy cập vị trí -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- Quyền truy cập vị trí -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
@@ -19,8 +19,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ElectronicStore"
-        tools:targetApi="31"
-        tools:replace="android:fullBackupContent">
+        tools:replace="android:fullBackupContent"
+        tools:targetApi="31">
+        <activity
+            android:name=".TermsPoliciesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ReportIssueActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ContactSupportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FAQsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HelpCenterActivity"
+            android:exported="false" />
         <activity
             android:name=".FilteredProductActivity"
             android:exported="false" />
@@ -46,8 +61,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCm7InBFhYJqdbPLmfa_LgqrjAz7T61k6s" />
+
         <activity
-            android:name=".PersonalActivity"
+            android:name=".BeforeLoginActivity"
             android:exported="false" />
         <activity
             android:name=".AdminDashboardActivity"
@@ -66,20 +82,24 @@
             android:exported="false" />
         <activity
             android:name=".OrderManagementActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".ProductReviewsActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".UserManagerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditProfileActivity"
             android:exported="false" />
         <activity
             android:name=".AddUserActivity"
@@ -116,9 +136,6 @@
         <activity
             android:name=".OrderDetailActivity"
             android:exported="false" />
-<!--        <activity-->
-<!--            android:name=".MainActivity"-->
-<!--            android:exported="false" />-->
     </application>
 
 </manifest>

@@ -81,9 +81,7 @@ public class EditUserActivity extends AppCompatActivity {
         saveButton.setOnClickListener(v -> saveUser());
         deleteButton.setOnClickListener(v -> deleteAccount());
 
-        backText.setOnClickListener(v -> {
-            startActivity(new Intent(EditUserActivity.this, UserManagerActivity.class));
-        });
+        backText.setOnClickListener(v -> finish());
     }
 
     private void saveUser() {
