@@ -7,15 +7,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.electronicstore.R;
 import com.example.electronicstore.model.Notification;
-
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import java.util.List;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
 
     private List<Notification> notifications;
+    private DatabaseReference notificationRef = FirebaseDatabase.getInstance().getReference("notifications");
 
     public NotificationAdapter(List<Notification> notifications) {
         this.notifications = notifications;
@@ -34,12 +35,33 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         holder.tvTitle.setText(notification.getTitle());
         holder.tvMessage.setText(notification.getMessage());
         holder.tvTime.setText(notification.getTime());
-        holder.imgNotification.setImageResource(notification.getIconResId());
+        holder.imgNotification.setImageResource(R.drawable.ic_notification);
+
+        // Đánh dấu đã đọc khi click
+        holder.itemView.setOnClickListener(v -> markAsRead(notification));
+
+        // Xóa khi nhấn giữ
+        holder.itemView.setOnLongClickListener(v -> {
+            deleteNotification(notification);
+            return true;
+        });
     }
 
     @Override
     public int getItemCount() {
         return notifications.size();
+    }
+
+    private void markAsRead(Notification notification) {
+        notification.setRead(true);
+        notificationRef.child(notification.getId()).child("isRead").setValue(true);
+        notifyDataSetChanged();
+    }
+
+    private void deleteNotification(Notification notification) {
+        notificationRef.child(notification.getId()).removeValue();
+        notifications.remove(notification);
+        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -55,4 +77,3 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         }
     }
 }
-
