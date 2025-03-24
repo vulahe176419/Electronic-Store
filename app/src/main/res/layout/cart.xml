@@ -103,14 +103,4 @@
             android:textColor="@color/white"/>
     </LinearLayout>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNav"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="?android:attr/windowBackground"
-        app:menu="@layout/bottom_nav_menu"
-        app:labelVisibilityMode="labeled"
-        app:itemIconTint="@layout/bottom_nav_color"
-        app:itemTextColor="@layout/bottom_nav_color"
-        app:layout_constraintBottom_toBottomOf="parent" />
 </RelativeLayout>
