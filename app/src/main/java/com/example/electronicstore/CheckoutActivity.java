@@ -149,11 +149,14 @@ public class CheckoutActivity extends AppCompatActivity {
         ordersReference.child(orderId).setValue(order)
                 .addOnSuccessListener(aVoid -> {
                     addOrderDetails(orderId);
+
+                    createOrderNotification(uid, orderId);
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(this, "Failed to create order: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
+
 
     private void addOrderDetails(String orderId) {
         for (Cart cart : carts) {
@@ -209,6 +212,13 @@ public class CheckoutActivity extends AppCompatActivity {
             return "Digital Wallet";
         }
         return "Cash on Delivery";
+    }
+
+    private void createOrderNotification(String userId, String orderId) {
+        String title = "Order Placed Successfully!";
+        String message = "Your order #" + orderId + " has been placed. You can track its status in Orders.";
+
+        com.example.electronicstore.utils.NotificationUtils.createNotification(userId, title, message);
     }
 
     private String getSelectedAddress() {

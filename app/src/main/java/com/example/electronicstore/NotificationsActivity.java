@@ -21,7 +21,7 @@ public class NotificationsActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private NotificationAdapter adapter;
     private List<Notification> notificationList;
-    private ImageView backText;
+    private ImageView backButton;
     private TextView tvNoNotifications;
     private DatabaseReference notificationRef;
 
@@ -32,7 +32,7 @@ public class NotificationsActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recycler_notifications);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        backText = findViewById(R.id.btn_back);
+        backButton = findViewById(R.id.btn_back);
         tvNoNotifications = findViewById(R.id.tv_no_notifications);
 
         notificationList = new ArrayList<>();
@@ -43,7 +43,7 @@ public class NotificationsActivity extends AppCompatActivity {
 
         loadNotifications();
 
-        backText.setOnClickListener(v -> finish());
+        backButton.setOnClickListener(v -> finish());
     }
 
     private void loadNotifications() {
@@ -58,17 +58,8 @@ public class NotificationsActivity extends AppCompatActivity {
                     }
                 }
 
-                // Reverse the list to show newest first (top to bottom)
                 Collections.reverse(notificationList);
-
-                if (notificationList.isEmpty()) {
-                    recyclerView.setVisibility(View.GONE);
-                    tvNoNotifications.setVisibility(View.VISIBLE);
-                } else {
-                    recyclerView.setVisibility(View.VISIBLE);
-                    tvNoNotifications.setVisibility(View.GONE);
-                }
-
+                tvNoNotifications.setVisibility(notificationList.isEmpty() ? View.VISIBLE : View.GONE);
                 adapter.notifyDataSetChanged();
             }
 

@@ -37,8 +37,17 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         holder.tvTime.setText(notification.getTime());
         holder.imgNotification.setImageResource(R.drawable.ic_notification);
 
+        // Nếu đã đọc, đổi màu text
+        if (notification.isRead()) {
+            holder.tvTitle.setTextColor(0xFF888888);
+        } else {
+            holder.tvTitle.setTextColor(0xFF000000);
+        }
+
+        // Bấm để đánh dấu là đã đọc
         holder.itemView.setOnClickListener(v -> markAsRead(notification));
 
+        // Nhấn giữ để xóa thông báo
         holder.itemView.setOnLongClickListener(v -> {
             deleteNotification(notification);
             return true;
@@ -51,9 +60,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     }
 
     private void markAsRead(Notification notification) {
-        notification.setRead(true);
-        notificationRef.child(notification.getId()).child("isRead").setValue(true);
-        notifyDataSetChanged();
+        if (!notification.isRead()) {
+            notification.setRead(true);
+            notificationRef.child(notification.getId()).child("isRead").setValue(true);
+            notifyDataSetChanged();
+        }
     }
 
     private void deleteNotification(Notification notification) {
