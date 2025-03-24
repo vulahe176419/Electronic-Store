@@ -42,17 +42,4 @@ public class NotificationUtils {
         createNotification(userId, title, message);
     }
 
-    // New method for address creation
-    public static void createAddressCreationNotification(String userId, String addressLine1) {
-        String title = "New Address Added";
-        String message = "A new address has been added: " + addressLine1;
-        createNotification(userId, title, message);
-    }
-
-    // New method for default address change
-    public static void createDefaultAddressChangeNotification(String userId, String addressLine1) {
-        String title = "Default Address Changed";
-        String message = "Your default address has been updated to: " + addressLine1;
-        createNotification(userId, title, message);
-    }
 }
